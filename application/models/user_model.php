@@ -16,5 +16,54 @@ class User_model extends CI_Model {
 		);
 
 		$this->db->insert("user", $data);
+		log_message("INFO", "registering user: $email");
+	}
+
+
+	public function check_login($email, $password) {
+
+		$this->db->where("email", $email);
+		$users = $this->db->get("user")->result_array();
+
+		log_message("INFO", "check login for user: $email");
+
+		if(count($users) == 1) {
+
+			$user = $users[0];
+			if(hash_hmac("md5", $password, $user['salt']) == $user['password']) {
+				return TRUE;
+			} else {
+				log_message("INFO", "password failed to login for user: $email");
+				return FALSE;
+			}
+
+		} else {
+
+			log_message("ERROR", "user does not exists for check login: $email");
+			return FALSE;
+		}
+	}
+
+	public function login($email) {
+
+		$this->db->where("email", $email);
+		$users = $this->db->get("user")->result_array();
+
+		if(count($users) == 1) {
+			log_message("INFO", "creating session for user: $email");
+
+			$user = $users[0];
+			$this->session->set_userdata(array(
+				"email" => $user['email'],
+				"nickname" => $user['nickname']
+			));
+
+			return TRUE;
+
+		} else {
+
+			log_message("ERROR", "user does not exists for check login: $email");
+			return FALSE;
+		}
 	}
 }
