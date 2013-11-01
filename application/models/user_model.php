@@ -77,4 +77,26 @@ class User_model extends CI_Model {
 		$this->login($email);
 		return TRUE;
 	}
+
+	public function changePassword($email, $oldPassword, $newPassword) {
+
+		if($this->check_login($email, $oldPassword)) {
+
+			$salt = md5(rand());
+			$newPassword = hash_hmac('md5', $newPassword, $salt);
+
+			$user = array(
+				"salt" => $salt, 
+				"password" => $newPassword
+			);
+
+			$this->update($email, $user);
+			return TRUE;
+
+		} else {
+
+			log_message("INFO", "password not correct when changing password - user: $email");
+			return FALSE;
+		}
+	}
 }

@@ -45,6 +45,29 @@
 
 		<h3>Change Password</h3>
 
+		<!-- Show Validation Error -->
+		<?php if(validation_errors()) { ?>
+			<div class='alert alert-error alert-block'>
+				<?php echo validation_errors(); ?>
+			</div>
+		<?php } ?>
+
+		<!-- Show ChangePassword Errors -->
+		<?php if(isset($errors["changePassword"])) { ?>
+			<div class='alert alert-error alert-block'>
+				<?php echo $errors['changePassword']; ?>
+			</div>
+		<?php } ?>
+
+		<!-- Show Success -->
+		<?php if($this->input->get("passwordChanged")) { ?>
+
+			<div class='alert alert-success'>
+				<strong>Password Changed Successfully!</strong>
+			</div>
+
+		<?php } ?>
+
 		<?php echo form_open("profile/doPasswordChange", array(
 				"class" => "form-horizontal",
 				"method" => "post"
@@ -54,19 +77,19 @@
 			<div class="control-group">
 				<label class="control-label" for="inputEmail">Current Password</label>
 				<div class="controls">
-					<input type="text" name='currPassword' value='<?php echo ""; ?>' id="inputEmail" placeholder="Enter your email">
+					<input type="password" name='currPassword' value='<?php echo ""; ?>' id="inputEmail" placeholder="Enter your current password">
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="inputNickname">New Password</label>
 				<div class="controls">
-					<input type="text" name='newPassword' value='<?php echo "";?>' id="inputNickname" placeholder="Enter your nickname">
+					<input type="password" name='newPassword' value='<?php echo "";?>' id="inputNickname" placeholder="Enter your new password">
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="inputNickname">Confirm New Password</label>
 				<div class="controls">
-					<input type="text" name='confirmNewPassword' value='<?php echo "";?>' id="inputNickname" placeholder="Enter your nickname">
+					<input type="password" name='confirmNewPassword' value='<?php echo "";?>' id="inputNickname" placeholder="Enter your new password again">
 				</div>
 			</div>
 			<div class="control-group">
