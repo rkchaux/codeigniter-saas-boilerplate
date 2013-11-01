@@ -40,4 +40,35 @@ class Plan_model extends CI_Model {
 			return 0;
 		}
 	}
+
+	public function updateMetric($email, $company, $metricName, $qty) {
+
+
+		$plan = $this->getSelectedPlan($email, $company);
+		if($plan) {
+
+			//get metricId
+			$this->db->where("plan", $plan);
+			$this->db->where("name", $metricName);
+			$plan_metrics = $this->db->get("plan_metric")->result_array();
+			if(count($plan_metrics) == 1) {
+
+				log_message("INFO", "update metric: '$metricName' for the current plan: $plan for company: $company under user: $email");
+				//has a plan metric
+				$plan_metric = intval($plan_metrics[0]['id']);
+				$sql = "INSERT INTO company_plan_metric (email, company, plan_metric, qty) VALUES (?, ?, ?,?) ";
+				$sql .= "ON DUPLICATE KEY UPDATE qty = qty + ?; ";
+				$this->db->query($sql, array($email, $company, $plan_metric, $qty, $qty));
+				return TRUE;
+			} else {
+				//no such plan metric for the current plan
+				log_message("ERROR", "no such plan metric: '$metricName' for the current plan: $plan for company: $company under user: $email");
+				return FALSE;
+			}
+		} else {
+
+			log_message("ERROR", "cannot determine the plan for company: $company under user: $user");
+			return FALSE;
+		}
+	}
 }
