@@ -10,6 +10,7 @@ $(function() {
 			$.post(BASE_URL + 'company/select', "name=" + company, function() {
 
 				loadCompanies();
+				location.reload();
 			});
 		}
 	});

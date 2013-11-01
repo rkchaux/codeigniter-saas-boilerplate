@@ -1,6 +1,7 @@
 <?php
 	$links = array(
 		array("caption" => "Dashboard", "href" => "user/dashboard"),
+		array("caption" => "Plans", "href" => "plan/select"),
 		array("caption" => "Profile", "href" => "profile"),
 		array("caption" => "Logout", "href" => "user/doLogout")
 	);

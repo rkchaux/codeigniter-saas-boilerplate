@@ -96,7 +96,7 @@ class User extends CI_Controller {
 		authorizedContent();
 
 		$data = array(
-			"scripts"=> array("dashboard.js")
+			"scripts"=> array("company.js")
 		);
 		$this->load->view("common/header", $data);
 		$this->load->view("common/private_navbar");

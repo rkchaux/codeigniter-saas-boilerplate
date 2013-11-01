@@ -74,6 +74,7 @@ class Company extends CI_Controller {
 		if($name) {
 
 			$this->model->delete($email, $name);
+			$this->session->set_userdata("company", NULL);
 			$this->sendJson(array("success" => true));
 		} else {
 
