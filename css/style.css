@@ -24,12 +24,17 @@ body {
 
 .project {
 
-	padding: 10px 20px 20px 20px;
+	padding: 10px 20px 10px 20px;
 	margin: 0px 20px 20px 0px;
 	border: 1px solid #ccc;
 	float: left;
 	width: 160px;
 	text-align: center;
+}
+
+.project img {
+
+	margin: 0px 0px 5px 0px;
 }
 
 .project .name {
@@ -46,4 +51,9 @@ body {
 
 #planList {
 	margin-top: 30px;
+}
+
+
+#archiveList {
+	margin: 30px 0px 0px 0px;
 }

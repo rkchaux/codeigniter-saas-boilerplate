@@ -25,10 +25,59 @@ class Project_model extends CI_Model {
 		}
 	}
 
+	public function delete($companyId, $id) {
+
+		log_message("INFO", "deleting project: $id of company: $companyId");
+
+		$this->db->where("company", $companyId);
+		$this->db->where("id", $id);
+
+		$this->db->delete("project");
+		return TRUE;
+	}
+
+	public function archive($companyId, $id) {
+
+		log_message("INFO", "archiving project: $id of company: $companyId");
+
+		$this->db->where("company", $companyId);
+		$this->db->where("id", $id);
+
+		$this->db->update("project", array(
+			"archived" => 1
+		));
+		return TRUE;
+	}
+
+	public function unarchive($companyId, $id) {
+
+		log_message("INFO", "unarchiving project: $id of company: $companyId");
+
+		$this->db->where("company", $companyId);
+		$this->db->where("id", $id);
+
+		$this->db->update("project", array(
+			"archived" => 0
+		));
+		return TRUE;
+	}
+
 	public function get($companyId) {
 
-		log_message("INFO", "getiing all companies for user: $companyId");
+		log_message("INFO", "getiing all projects for company: $companyId");
 		
+		$this->db->where("archived", 0);
+		$this->db->where("company", $companyId);
+		$companies = $this->db->get("project")->result_array();
+
+		return $companies;
+	}
+
+	public function getArchived($companyId) {
+
+		log_message("INFO", "getiing all archived projects for company: $companyId");
+
+		$this->db->where("archived", 1);
 		$this->db->where("company", $companyId);
 		$companies = $this->db->get("project")->result_array();
 

@@ -14,7 +14,9 @@
 
 			<div class='project well'>
 				<div class='name'><?php echo $project['name']?></div>
-				<img src="http://placehold.it/150x150" />
+				<img src="http://placehold.it/150x127" />
+				<button data-id='<?php echo $project['id']; ?>' class='projectDelete btn btn-danger btn-mini'>Delete</button>
+				<button data-id='<?php echo $project['id']; ?>' class='projectArchive btn btn-inverse btn-mini'>Archive</button>
 			</div>	
 
 		<?php } ?>
