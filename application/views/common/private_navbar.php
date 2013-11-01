@@ -7,7 +7,8 @@
 		array("caption" => "Logout", "href" => "user/doLogout")
 	);
 ?>
-<div class="navbar">
+<div style='height: 50px'></div>
+<div class="navbar navbar-inverse navbar-fixed-top navbar-shadow">
 	<div class="navbar-inner">
 	<div class='container'>
 		<a class="brand" href="#">SAAS Boilerplate</a>

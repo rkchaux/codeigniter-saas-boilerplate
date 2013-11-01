@@ -5,8 +5,9 @@
 		array("caption" => "Register", "href" => "user/register")
 	);
 ?>
-<div class="navbar">
-	<div class="navbar-inner">
+<div style='height: 50px'></div>
+<div class="navbar navbar-inverse navbar-fixed-top navbar-shadow">
+	<div class="navbar-inner navbar-inverse">
 	<div class='container'>
 		<a class="brand" href="#">SAAS Boilerplate</a>
 		<ul class="nav">
