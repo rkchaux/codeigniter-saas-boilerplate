@@ -2,7 +2,7 @@
 	<h1>Project Archive</h1>
 	<span class='label label-info'><?php echo $company['name']; ?></span>
 
-	<div id='archiveList'>
+	<div class='miniContent'>
 		<table class="table table-striped">
 			<thead>
 				<tr>

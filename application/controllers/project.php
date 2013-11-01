@@ -101,6 +101,47 @@ class Project extends CI_Controller {
 		$this->load->view("common/footer");
 	}
 
+	public function edit($id) {
+
+		$this->load->helper("form");
+
+		$companyInfo = $this->session->userdata("company");
+
+		$data = array( "project" => NULL );
+		$project = $this->model->getOne($companyInfo['id'], $id);
+
+		if($project) {
+			$data['project'] = $project;
+		}
+
+		$this->load->view("common/header");
+		$this->load->view("common/private_navbar");
+		$this->load->view("project/edit", $data);
+		$this->load->view("common/footer");
+
+	}
+
+	public function doEdit($id) {
+
+		$this->load->library("form_validation");
+
+		$this->form_validation->set_rules("name", "Name", "required");
+
+		if($this->form_validation->run() == TRUE) {
+			
+			$companyInfo = $this->session->userdata('company');
+			$project = array(
+				"name" => $this->input->post("name")
+			);
+
+			$this->model->update($companyInfo['id'], $id, $project);
+			redirect(site_url('user/dashboard?projectEdited=true'));
+		} else {
+
+			$this->edit($id);
+		}
+	}
+
 	private function sendJson($obj) {
 		
 		header("Content-Type: application/json");
