@@ -19,7 +19,7 @@ class Company extends CI_Controller {
 
 			if($this->model->create($email, $name)) {
 
-				$this->session->set_userdata('company', $name);
+				$this->addCompanyToSession($name);
 				$this->sendJson(array("success" => true));
 			} else {
 
@@ -56,14 +56,17 @@ class Company extends CI_Controller {
 		$email = $this->session->userdata("email");
 		$name = $this->input->post("name");
 
-		if($name) {
 
-			$companyInfo = array(
-				"name" => $name,
-				"isOwner" => $this->model->isOwner($email, $name)
-			);
-			$this->session->set_userdata("company", $companyInfo);
-			$this->sendJson(array("success" => true));
+		if($name) {
+			
+			if($this->addCompanyToSession($name)) {
+
+				$this->sendJson(array("success" => true));
+			} else {
+
+				$this->sendJson(array("error" => "No Such Company"));
+			}
+
 		} else {
 
 			$this->sendJson(array("error" => "No Name Provided"));
@@ -92,5 +95,26 @@ class Company extends CI_Controller {
 		
 		header("Content-Type: application/json");
 		echo json_encode($obj);
+	}
+
+	private function addCompanyToSession($name) {
+
+		$email = $this->session->userdata("email");
+		$company = $this->model->getOne($email, $name);
+
+		if($company) {
+
+			$companyInfo = array(
+				"name" => $company['name'],
+				"isOwner" => true,
+				"id" => $company['id']
+			);
+			$this->session->set_userdata("company", $companyInfo);
+			
+			return TRUE;
+		} else {
+
+			return FALSE;
+		}	
 	}
 }

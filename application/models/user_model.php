@@ -59,14 +59,15 @@ class User_model extends CI_Model {
 			));
 
 			//select the first Company for this user
-			$sql = "SELECT name FROM company WHERE email = ? ORDER BY createdAt ASC LIMIT 1";
+			$sql = "SELECT id, name FROM company WHERE email = ? ORDER BY createdAt ASC LIMIT 1";
 			$companies = $this->db->query($sql, array($email))->result_array();
 			if(count($companies) == 1) {
 				//has company
 				$company = $companies[0]['name'];
 				$companyInfo = array(
 					"name" => $company,
-					"isOwner" => TRUE
+					"isOwner" => TRUE,
+					"id" => $companies[0]['id']
 				);
 				$this->session->set_userdata("company", $companyInfo);
 				log_message("INFO", "company: $company selected at login for user: $email");

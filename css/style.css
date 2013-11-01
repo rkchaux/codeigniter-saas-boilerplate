@@ -17,3 +17,24 @@ body {
 	padding: 0px 0px 20px 0px;
 	border-bottom: 1px solid #ccc;
 }
+
+#projectList {
+	margin: 30px 0px 0px 0px;
+}
+
+.project {
+
+	padding: 10px 20px 20px 20px;
+	margin: 0px 20px 20px 0px;
+	border: 1px solid #ccc;
+	float: left;
+	width: 160px;
+	text-align: center;
+}
+
+.project .name {
+
+	font-size: 15px;
+	font-weight: bold;
+	margin: 0px 0px 10px 0px;
+}

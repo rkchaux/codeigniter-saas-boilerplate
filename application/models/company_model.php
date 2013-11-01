@@ -41,6 +41,24 @@ class Company_model extends CI_Model {
 		return $rtn;
 	}
 
+	public function getOne($email, $name) {
+
+		log_message("INFO", "getiing company: $name for user: $email");
+		
+		$this->db->where("name", $name);
+		$this->db->where("email", $email);
+		$companies = $this->db->get("company")->result_array();
+
+		if(count($companies) == 1) {
+
+			return $companies[0];
+		} else {
+
+			log_message("INFO", "no such company: $company for user: #email");
+			return NULL;
+		}
+	}
+
 	public function delete($email, $name) {
 
 		$this->db->where("email", $email);

@@ -95,12 +95,20 @@ class User extends CI_Controller {
 
 		authorizedContent();
 
+		$this->load->model("project_model");
+		$companyInfo = $this->session->userdata['company'];
+
 		$data = array(
-			"scripts"=> array("company.js")
+			"scripts"=> array("company.js", "project.js")
 		);
+
+		$dashboardData = array(
+			"projects" => $this->project_model->get($companyInfo['id'])
+		);
+
 		$this->load->view("common/header", $data);
 		$this->load->view("common/private_navbar");
-		$this->load->view("user/dashboard");
+		$this->load->view("user/dashboard", $dashboardData);
 		$this->load->view("common/footer");
 	}
 }
