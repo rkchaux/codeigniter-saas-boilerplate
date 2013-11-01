@@ -14,7 +14,8 @@ class Company_model extends CI_Model {
 
 			$this->db->insert("company", array(
 				"name" => $name,
-				"email" => $email
+				"email" => $email,
+				"createdAt" => time()
 			));
 			return TRUE;
 		} else {
