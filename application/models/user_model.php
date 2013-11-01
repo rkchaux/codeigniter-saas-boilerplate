@@ -66,4 +66,15 @@ class User_model extends CI_Model {
 			return FALSE;
 		}
 	}
+
+	public function update($email, $user) {
+
+		log_message("INFO", "updating user: $email");
+
+		$this->db->where("email", $email);
+		$this->db->update("user", $user);
+
+		$this->login($email);
+		return TRUE;
+	}
 }

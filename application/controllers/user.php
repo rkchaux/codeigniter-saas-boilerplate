@@ -82,9 +82,24 @@ class User extends CI_Controller {
 		}
 	}
 
-	function dashboard() {
+	public function doLogout() {
 
-		
-		echo "Welcome! " . $this->session->userdata("email");
+		authorizedContent();
+
+		$this->session->sess_destroy();
+		redirect(site_url("user/login"));
+	}
+
+	public function dashboard() {
+
+		authorizedContent();
+
+		$data = array(
+			"scripts"=> array("dashboard.js")
+		);
+		$this->load->view("common/header", $data);
+		$this->load->view("common/private_navbar");
+		$this->load->view("user/dashboard");
+		$this->load->view("common/footer");
 	}
 }
