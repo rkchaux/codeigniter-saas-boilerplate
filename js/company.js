@@ -4,40 +4,7 @@ $(function() {
 
 	$('#companyList').change(function() {
 
-		var company = getSelecteCompany();
-		if(company) {
-
-			$.post(BASE_URL + 'company/select', "name=" + company, function() {
-
-				loadCompanies();
-				location.reload();
-			});
-		}
-	});
-
-	$('#deleteCompany').click(function() {
-
-		var confirmed = confirm("Do you need to delete selected company?");
-		if(confirmed) {
-
-			var company = getSelecteCompany();
-			$.post(BASE_URL + 'company/delete', "name=" + company, function() {
-
-				location.reload();
-			});
-		}
-	});
-
-	$('#createCompany').click(function() {
-
-		var company = prompt("Enter name for your new company");
-		if(company) {
-
-			$.post(BASE_URL + 'company/create', "name=" + company, function() {
-
-				location.reload();
-			});
-		}
+		
 	});
 });
 

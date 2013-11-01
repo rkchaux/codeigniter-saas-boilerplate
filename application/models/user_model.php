@@ -66,7 +66,6 @@ class User_model extends CI_Model {
 				$company = $companies[0]['name'];
 				$companyInfo = array(
 					"name" => $company,
-					"isOwner" => TRUE,
 					"id" => $companies[0]['id']
 				);
 				$this->session->set_userdata("company", $companyInfo);

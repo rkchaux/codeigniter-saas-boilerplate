@@ -13,7 +13,7 @@ class Plan extends CI_Controller {
 		authorizedContent();
 
 		$data = array(
-			"scripts"=> array("company.js", "plans.js")
+			"scripts"=> array("plans.js")
 		);
 
 		$email = $this->session->userdata("email");
@@ -21,8 +21,8 @@ class Plan extends CI_Controller {
 
 		$planData = array(
 			"plans" => $this->model->get(),
-			"selectedPlan" => $this->model->getSelectedPlan($email, $companyInfo['name']),
-			"selectedCompany" => $companyInfo
+			"selectedPlan" => $this->model->getSelectedPlan($companyInfo['id']),
+			"company" => $companyInfo
 		);
 
 		$this->load->view("common/header", $data);
@@ -38,25 +38,28 @@ class Plan extends CI_Controller {
 		$email = $this->session->userdata("email");
 		$companyInfo = $this->session->userdata("company");
 
-		if($companyInfo['isOwner']) {
+		$companyId = $companyInfo['id'];
+		$planId = intval($this->input->post("planId"));
 
-			$company = $companyInfo['name'];
-			$planId = intval($this->input->post("planId"));
+		if($planId) {
 
-			if($planId) {
+			$this->model->selectPlan($companyId, $planId);
+			$this->sendJson(array("success" => true));
 
-				$this->model->selectPlan($email, $company, $planId);
-				$this->sendJson(array("success" => true));
-
-			} else {
-
-				$this->sendJson(array("error" => "No PlanId Provided"));
-			}
 		} else {
-			
-			$this->sendJson(array("error" => "You can't change plans owns by others"));
+
+			$this->sendJson(array("error" => "No PlanId Provided"));
 		}
 
+	}
+
+	public function um($metric, $qty) {
+
+		$companyInfo = $this->session->userdata("company");
+
+		$companyId = $companyInfo['id'];
+
+		updateMetric($companyId, $metric, $qty);
 	}
 
 	private function sendJson($obj) {

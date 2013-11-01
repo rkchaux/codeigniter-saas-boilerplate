@@ -3,11 +3,11 @@
 /*
 	Update the given metric for the company
 */
-function updateMetric($email, $company, $metricName, $qty) {
+function updateMetric($companyId, $metricName, $qty) {
 
 	$CI = &get_instance();
 	$CI->load->model("plan_model");
-	$CI->plan_model->updateMetric($email, $company, $metricName, $qty);
+	$CI->plan_model->updateMetric($companyId, $metricName, $qty);
 }
 
 /*
@@ -18,8 +18,8 @@ function updateMetricForUser($metricName, $qty) {
 	$CI = &get_instance();
 
 	$email = $CI->session->userdata("email");
-	$company = $CI->session->userdata("company");
+	$companyInfo = $CI->session->userdata("company");
 
 	$CI->load->model("plan_model");
-	$CI->plan_model->updateMetric($email, $company, $metricName, $qty);
+	$CI->plan_model->updateMetric($companyInfo['id'], $metricName, $qty);
 }

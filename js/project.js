@@ -7,9 +7,13 @@ $(function() {
 		var project = prompt("Enter name for the new project");
 		if(project) {
 
-			$.post(BASE_URL + 'project/create', "name=" + project, function() {
+			$.post(BASE_URL + 'project/create', "name=" + project, function(data) {
 
-				location.reload();
+				if(data.success) {
+					location.href = BASE_URL + 'user/dashboard';
+				} else {
+					alert("Project already exists!");
+				}
 			});
 		}
 	});

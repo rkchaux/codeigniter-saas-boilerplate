@@ -1,16 +1,15 @@
 <div class='container'>
-	<h1>Dashboard</h1>	
-	<div id='companyBar'>
-		<label>Select Your Company</label>
+	<h1>Projects</h1>	
+	<label>Filter By Company</label>
 		<select id='companyList'>
-		</select><br>
-		<a id='createCompany' class='btn btn-primary'>Create New Company</a> 
-		<a  id='deleteCompany' class='btn btn-danger'>Delete Selected Company</a>
-	</div>
-	<h2>Projects</h2>
-	<button id='addProject' class='btn btn-primary'>Add New</button>
+		</select>
+
 	<div id='projectList'>
 		
+		<div id='addProject' class='project well'>
+			<div class='name'>Add New Project</div>
+			<img style='width: 150px; height: 150px;' src="<?php echo base_url(); ?>images/add.png" />
+		</div>	
 		<?php foreach($projects as $project) { ?>
 
 			<div class='project well'>

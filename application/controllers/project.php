@@ -13,27 +13,22 @@ class Project extends CI_Controller {
 		authorizedContent(true);
 
 		$companyInfo = $this->session->userdata("company");
-		if($companyInfo['isOwner']) {
+		$name = $this->input->post("name");
 
-			$name = $this->input->post("name");
+		if($name) {
 
-			if($name) {
+			if($this->model->create($companyInfo['id'], $name)) {
 
-				if($this->model->create($companyInfo['id'], $name)) {
-
-					$this->sendJson(array("success" => true));
-				} else {
-
-					$this->sendJson(array("success" => false));
-				}
-				
-
+				$this->sendJson(array("success" => true));
 			} else {
 
-				$this->sendJson(array("error" => "No Name Provided"));
+				$this->sendJson(array("success" => false));
 			}
+			
+
 		} else {
-			$this->sendJson(array("error" => "You are not the owner of this project"));
+
+			$this->sendJson(array("error" => "No Name Provided"));
 		}
 	}
 

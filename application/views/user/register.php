@@ -27,6 +27,12 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label" for="inputCompany">Company</label>
+			<div class="controls">
+				<input type="text" name='company' value='<?php echo set_value('company');?>' id="inputCompany" placeholder="Enter your company name">
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label" for="inputPassword">Password</label>
 			<div class="controls">
 				<input type="password" name='password' id="inputPassword" placeholder="Enter your password">
@@ -40,7 +46,7 @@
 		</div>
 		<div class="control-group">
 			<div class="controls">
-				<button type="submit" class="btn">Register</button>
+				<button type="submit" class="btn btn-primary">Register</button>
 			</div>
 		</div>
 	</form>

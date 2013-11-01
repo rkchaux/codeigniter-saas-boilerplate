@@ -11,12 +11,11 @@ class Plan_model extends CI_Model {
 		return $plans;
 	}
 
-	public function selectPlan($email, $company, $planId) {
+	public function selectPlan($companyId, $planId) {
 
-		log_message("INFO", "select plan: $planId for company: $company under user: $email");
+		log_message("INFO", "select plan: $planId for company: $companyId");
 
-		$this->db->where("email", $email);
-		$this->db->where("name", $company);
+		$this->db->where("id", $companyId);
 
 		$data = array(
 			"plan" => $planId
@@ -25,14 +24,13 @@ class Plan_model extends CI_Model {
 		return TRUE;
 	}
 
-	public function getSelectedPlan($email, $company) {
+	public function getSelectedPlan($companyId) {
 
-		if($company) {
+		if($companyId) {
 
-			log_message("INFO", "getting selectd plan for company: $company under user: $email");
+			log_message("INFO", "getting selectd plan for company: $companyId");
 
-			$this->db->where("email", $email);
-			$this->db->where("name", $company);
+			$this->db->where("id", $companyId);
 
 			$companies = $this->db->get("company")->result_array();
 			return $companies[0]['plan'];
@@ -41,10 +39,10 @@ class Plan_model extends CI_Model {
 		}
 	}
 
-	public function updateMetric($email, $company, $metricName, $qty) {
+	public function updateMetric($companyId, $metricName, $qty) {
 
 
-		$plan = $this->getSelectedPlan($email, $company);
+		$plan = $this->getSelectedPlan($companyId);
 		if($plan) {
 
 			//get metricId
@@ -53,21 +51,21 @@ class Plan_model extends CI_Model {
 			$plan_metrics = $this->db->get("plan_metric")->result_array();
 			if(count($plan_metrics) == 1) {
 
-				log_message("INFO", "update metric: '$metricName' for the current plan: $plan for company: $company under user: $email");
+				log_message("INFO", "update metric: '$metricName' for the current plan: $plan for company: $companyId");
 				//has a plan metric
 				$plan_metric = intval($plan_metrics[0]['id']);
-				$sql = "INSERT INTO company_plan_metric (email, company, plan_metric, qty) VALUES (?, ?, ?,?) ";
+				$sql = "INSERT INTO company_plan_metric (company, plan_metric, qty) VALUES (?, ?, ?) ";
 				$sql .= "ON DUPLICATE KEY UPDATE qty = qty + ?; ";
-				$this->db->query($sql, array($email, $company, $plan_metric, $qty, $qty));
+				$this->db->query($sql, array($companyId, $plan_metric, $qty, $qty));
 				return TRUE;
 			} else {
 				//no such plan metric for the current plan
-				log_message("ERROR", "no such plan metric: '$metricName' for the current plan: $plan for company: $company under user: $email");
+				log_message("ERROR", "no such plan metric: '$metricName' for the current plan: $plan for company: $companyId");
 				return FALSE;
 			}
 		} else {
 
-			log_message("ERROR", "cannot determine the plan for company: $company under user: $user");
+			log_message("ERROR", "cannot determine the plan for company: $companyId");
 			return FALSE;
 		}
 	}

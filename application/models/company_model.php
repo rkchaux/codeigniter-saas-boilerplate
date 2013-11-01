@@ -68,18 +68,4 @@ class Company_model extends CI_Model {
 		return TRUE;
 	}
 
-	public function isOwner($email, $company) {
-
-
-		log_message("INFO", "checking company: $company owned to user: $email");
-		$this->db->where("email", $email);
-		$this->db->where("name", $company);
-		$companies = $this->db->get("company");
-
-		if(count($companies) == 1) {
-			return TRUE;
-		} else {
-			return FALSE;
-		}
-	}
 }

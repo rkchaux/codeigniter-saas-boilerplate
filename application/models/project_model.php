@@ -35,27 +35,4 @@ class Project_model extends CI_Model {
 		return $companies;
 	}
 
-	// public function delete($email, $name) {
-
-	// 	$this->db->where("email", $email);
-	// 	$this->db->where("name", $name);
-
-	// 	$this->db->delete("company");
-	// 	return TRUE;
-	// }
-
-	// public function isOwner($email, $company) {
-
-
-	// 	log_message("INFO", "checking company: $company owned to user: $email");
-	// 	$this->db->where("email", $email);
-	// 	$this->db->where("name", $company);
-	// 	$companies = $this->db->get("company");
-
-	// 	if(count($companies) == 1) {
-	// 		return TRUE;
-	// 	} else {
-	// 		return FALSE;
-	// 	}
-	// }
 }

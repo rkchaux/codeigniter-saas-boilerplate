@@ -8,7 +8,7 @@ $(function() {
 
 			if(data.success) {
 
-				location.reload();
+				location.href = BASE_URL + 'plan/select';
 			} else {
 				alert(data.error);
 			}
