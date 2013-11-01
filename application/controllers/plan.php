@@ -17,11 +17,12 @@ class Plan extends CI_Controller {
 		);
 
 		$email = $this->session->userdata("email");
-		$company = $this->session->userdata("company");
+		$companyInfo = $this->session->userdata("company");
 
 		$planData = array(
 			"plans" => $this->model->get(),
-			"selectedPlan" => $this->model->getSelectedPlan($email, $company)
+			"selectedPlan" => $this->model->getSelectedPlan($email, $companyInfo['name']),
+			"selectedCompany" => $companyInfo
 		);
 
 		$this->load->view("common/header", $data);
@@ -35,17 +36,25 @@ class Plan extends CI_Controller {
 		authorizedContent(true);
 
 		$email = $this->session->userdata("email");
-		$company = $this->session->userdata("company");
-		$planId = intval($this->input->post("planId"));
+		$companyInfo = $this->session->userdata("company");
 
-		if($planId) {
+		if($companyInfo['isOwner']) {
 
-			$this->model->selectPlan($email, $company, $planId);
-			$this->sendJson(array("success" => true));
+			$company = $companyInfo['name'];
+			$planId = intval($this->input->post("planId"));
 
+			if($planId) {
+
+				$this->model->selectPlan($email, $company, $planId);
+				$this->sendJson(array("success" => true));
+
+			} else {
+
+				$this->sendJson(array("error" => "No PlanId Provided"));
+			}
 		} else {
-
-			$this->sendJson(array("error" => "No PlanId Provided"));
+			
+			$this->sendJson(array("error" => "You can't change plans owns by others"));
 		}
 
 	}

@@ -41,8 +41,9 @@ class Company extends CI_Controller {
 		
 		$companies = $this->model->get($email);
 
+		$companyInfo = $this->session->userdata("company");
 		$data = array(
-			"selected" => $this->session->userdata("company"),
+			"selected" => $companyInfo['name'],
 			"companies" => $companies
 		);
 		$this->sendJson($data);
@@ -52,11 +53,16 @@ class Company extends CI_Controller {
 
 		authorizedContent(true);
 
+		$email = $this->session->userdata("email");
 		$name = $this->input->post("name");
 
 		if($name) {
 
-			$this->session->set_userdata(array("company" => $name));
+			$companyInfo = array(
+				"name" => $name,
+				"isOwner" => $this->model->isOwner($email, $name)
+			);
+			$this->session->set_userdata("company", $companyInfo);
 			$this->sendJson(array("success" => true));
 		} else {
 

@@ -64,7 +64,11 @@ class User_model extends CI_Model {
 			if(count($companies) == 1) {
 				//has company
 				$company = $companies[0]['name'];
-				$this->session->set_userdata("company", $company);
+				$companyInfo = array(
+					"name" => $company,
+					"isOwner" => TRUE
+				);
+				$this->session->set_userdata("company", $companyInfo);
 				log_message("INFO", "company: $company selected at login for user: $email");
 			} else {
 				log_message("INFO", "No such company to select for user: $email at login");
