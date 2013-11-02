@@ -4,6 +4,8 @@ class User_model extends CI_Model {
 
 	public function register($email, $password, $nickname) {
 
+		log_message("INFO", "registering user: $email");
+
 		$salt = md5(rand());
 		$password = hash_hmac('md5', $password, $salt);
 
@@ -16,7 +18,10 @@ class User_model extends CI_Model {
 		);
 
 		$this->db->insert("user", $data);
-		log_message("INFO", "registering user: $email");
+
+		//getting user id
+		$users = $this->db->get_where("user", array("email" => $email))->result_array();
+		return $users[0]['id'];
 	}
 
 

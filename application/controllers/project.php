@@ -149,6 +149,36 @@ class Project extends CI_Controller {
 		}
 	}
 
+	public function view($id) {
+
+		$this->load->helper("form");
+
+		$companyInfo = $this->session->userdata("company");
+
+		$data = array( "project" => NULL );
+		$project = $this->model->getOne($companyInfo['id'], $id);
+
+		if($project) {
+			$data['project'] = $project;
+		}
+
+		$this->load->view("common/header", array(
+			"scripts" => array("projectView.js")
+		));
+		$this->load->view("common/private_navbar");
+		$this->load->view("project/view", $data);
+		$this->load->view("common/footer");
+
+	}
+
+	public function doAssignUser($projectId) {
+
+		$email = $this->input->post("email");
+		$this->model->assignUserByEmail($email, $projectId);
+
+		$this->sendJson(array("success" => true));
+	}
+
 	private function sendJson($obj) {
 		
 		header("Content-Type: application/json");

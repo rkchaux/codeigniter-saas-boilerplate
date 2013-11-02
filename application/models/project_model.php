@@ -122,10 +122,36 @@ class Project_model extends CI_Model {
 
 		log_message("INFO", "assigning user: $userId to the project: $projectId");
 
-		$this->db->insert("user_project", array(
-			"user" => $userId, 
-			"project" => $projectId
-		));
+		$sql = "INSERT INTO user_project (user, project) VALUES (?, ?) ON DUPLICATE KEY UPDATE project = ?";
+		$this->db->query($sql, array($userId, $projectId, $projectId));
+	}
+
+	public function assignUserByEmail($email, $projectId) {
+
+		log_message("INFO", "assigning user by email: $email to the project: $projectId");
+
+		$users = $this->db->get_where("user", array("email" => $email))->result_array();
+		if(count($users) == 1) {
+			//user exists and asign him
+			$this->assignUser($users[0]['id'], $projectId);
+		} else {
+			//invite user
+			log_message("INFO", "inviting email: $email to the project: $projectId");
+
+			//register user with a random password
+			$this->load->model("user_model");
+			$password = md5(rand());
+			$userId = $this->user_model->register($email, $password, "");
+
+			//assign user
+			$this->assignUser($userId, $projectId);
+
+			//inviter user
+			$this->load->model("invitation_model");
+			$inviteKey = $this->invitation_model->inviteUser($email);
+
+			log_message("INFO", "invited email: $email with key: $inviteKey");
+		}
 	}
 
 }
