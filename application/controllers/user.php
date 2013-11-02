@@ -26,8 +26,7 @@ class User extends CI_Controller {
 			'required|valid_email|is_unique[user.email]');
 		$this->form_validation->set_rules('password', 'Password', 'required');
 		$this->form_validation->set_rules('company', 'Company', 'required');
-		$this->form_validation->set_rules('confirmPassword', 'Confirm Password', 'required');
-		$this->form_validation->set_rules('confirmPassword', 'Confirm Password', 'matches[password]');
+		$this->form_validation->set_rules('confirmPassword', 'Confirm Password', 'required|matches[password]');
 
 		if($this->form_validation->run() == FALSE) {
 			

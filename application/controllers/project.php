@@ -158,15 +158,18 @@ class Project extends CI_Controller {
 		$data = array( "project" => NULL );
 		$project = $this->model->getOne($companyInfo['id'], $id);
 
-		if($project) {
-			$data['project'] = $project;
-		}
 
 		$this->load->view("common/header", array(
 			"scripts" => array("projectView.js")
 		));
 		$this->load->view("common/private_navbar");
-		$this->load->view("project/view", $data);
+
+		if($project) {
+			$data['project'] = $project;
+			$data['users'] = $this->model->getUsers($project['id']);
+			$this->load->view("project/view", $data);
+		}
+
 		$this->load->view("common/footer");
 
 	}

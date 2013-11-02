@@ -154,4 +154,10 @@ class Project_model extends CI_Model {
 		}
 	}
 
+	public function getUsers($projectId) {
+
+		$sql = "SELECT u.*, i.secret FROM user_project up, user u LEFT JOIN invitation i ON i.email = u.email WHERE up.user = u.id AND up.project = ?";
+		return $this->db->query($sql, array($projectId))->result_array();
+	}
+
 }
