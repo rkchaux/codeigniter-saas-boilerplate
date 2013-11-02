@@ -1,11 +1,17 @@
 <?php
-	$links = array(
-		array("caption" => "Dashboard", "href" => "user/dashboard"),
-		array("caption" => "Archive", "href" => "project/archive"),
-		array("caption" => "Plans", "href" => "plan/select"),
-		array("caption" => "Profile", "href" => "profile"),
-		array("caption" => "Logout", "href" => "user/doLogout")
-	);
+	$links = array();
+
+	array_push($links, array("caption" => "Dashboard", "href" => "user/dashboard"));
+	
+	$comapanyInfo = $this->session->userdata("company");
+	if($comapanyInfo) {
+		array_push($links, array("caption" => "Archive", "href" => "project/archive"));
+		array_push($links, array("caption" => "Plans", "href" => "plan/select"));
+	}
+
+	array_push($links, array("caption" => "Profile", "href" => "profile"));
+	array_push($links, array("caption" => "Logout", "href" => "user/doLogout"));
+
 ?>
 <div style='height: 50px'></div>
 <div class="navbar navbar-inverse navbar-fixed-top navbar-shadow">

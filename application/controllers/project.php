@@ -15,8 +15,10 @@ class Project extends CI_Controller {
 		$companyInfo = $this->session->userdata("company");
 		$name = $this->input->post("name");
 
+		if(!$companyInfo) {
 
-		if($name) {
+			$this->sendJson(array("error" => "No Company Selected"));
+		} else if($name) {
 
 			$projectId = $this->model->create($companyInfo['id'], $name);
 			
