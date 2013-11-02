@@ -98,9 +98,30 @@ class User extends CI_Controller {
 		redirect(site_url("user/login"));
 	}
 
-	public function dashboard() {
+	public function dashboard($companyId = NULL) {
 
 		authorizedContent();
+
+		$companies = $this->_getCompanies();
+
+		if(!$companyId) {
+			log_message("INFO", "calling again dashboard with the first company");
+			return $this->dashboard($companies[0]['id']);
+		}
+
+		$companyInfo = $this->session->userdata('company');
+		$userId = $this->session->userdata("id");
+		
+		$this->load->model("project_model");
+
+		if($companyInfo && $companyId == $companyInfo['id']) {
+			//getting company's project
+			$projects = $this->project_model->get($companyInfo['id']);
+			
+		} else {
+			//getting assigned projects
+			$projects = $this->project_model->getAssignedProjects($userId, $companyId);
+		}
 
 		$this->load->model("project_model");
 
@@ -109,18 +130,28 @@ class User extends CI_Controller {
 		);
 
 		$dashboardData = array(
-			"projects" => array()
+			"projects" => $projects,
+			"companies" => $companies,
+			"selectedCompany" => $companyId
 		);
-
-		if(isset($this->session->userdata['company'])) {
-
-			$companyInfo = $this->session->userdata['company'];
-			$dashboardData['projects'] = $this->project_model->get($companyInfo['id']);
-		}
 
 		$this->load->view("common/header", $data);
 		$this->load->view("common/private_navbar");
 		$this->load->view("user/dashboard", $dashboardData);
 		$this->load->view("common/footer");
+	}
+
+	private function _getCompanies() {
+		
+		$email = $this->session->userdata("email");
+		$userId = $this->session->userdata("id");
+
+		$this->load->model("company_model");
+		$companies = $this->company_model->get($email);
+
+		$this->load->model("project_model");
+		$projectCompanies = $this->project_model->getCompanies($userId);
+
+		return array_merge($companies, $projectCompanies);
 	}
 }

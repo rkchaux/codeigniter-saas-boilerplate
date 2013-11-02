@@ -26,7 +26,7 @@ class Project extends CI_Controller {
 
 				//assign the logged_in user to the project
 				$userId = $this->session->userdata("id");
-				$this->model->assignUser($userId, $projectId);
+				$this->model->assignUser($userId, $projectId, "OWNER");
 
 				$this->sendJson(array("success" => true));
 			} else {

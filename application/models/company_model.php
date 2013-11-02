@@ -32,13 +32,7 @@ class Company_model extends CI_Model {
 		$this->db->where("email", $email);
 		$companies = $this->db->get("company")->result_array();
 
-		$rtn = array();
-		foreach ($companies as $company) {
-			
-			array_push($rtn, $company['name']);
-		}
-
-		return $rtn;
+		return $companies;
 	}
 
 	public function getOne($email, $name) {

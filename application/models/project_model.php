@@ -118,12 +118,12 @@ class Project_model extends CI_Model {
 		return $companies;
 	}
 
-	public function assignUser($userId, $projectId) {
+	public function assignUser($userId, $projectId, $role) {
 
 		log_message("INFO", "assigning user: $userId to the project: $projectId");
 
-		$sql = "INSERT INTO user_project (user, project) VALUES (?, ?) ON DUPLICATE KEY UPDATE project = ?";
-		$this->db->query($sql, array($userId, $projectId, $projectId));
+		$sql = "INSERT INTO user_project (user, project, role) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE role = ?";
+		$this->db->query($sql, array($userId, $projectId, $role, $role));
 	}
 
 	public function assignUserByEmail($email, $projectId) {
@@ -133,7 +133,7 @@ class Project_model extends CI_Model {
 		$users = $this->db->get_where("user", array("email" => $email))->result_array();
 		if(count($users) == 1) {
 			//user exists and asign him
-			$this->assignUser($users[0]['id'], $projectId);
+			$this->assignUser($users[0]['id'], $projectId, "USER");
 		} else {
 			//invite user
 			log_message("INFO", "inviting email: $email to the project: $projectId");
@@ -144,7 +144,7 @@ class Project_model extends CI_Model {
 			$userId = $this->user_model->register($email, $password, "");
 
 			//assign user
-			$this->assignUser($userId, $projectId);
+			$this->assignUser($userId, $projectId, "USER");
 
 			//inviter user
 			$this->load->model("invitation_model");
@@ -158,6 +158,27 @@ class Project_model extends CI_Model {
 
 		$sql = "SELECT u.*, i.secret FROM user_project up, user u LEFT JOIN invitation i ON i.email = u.email WHERE up.user = u.id AND up.project = ?";
 		return $this->db->query($sql, array($projectId))->result_array();
+	}
+
+	public function getCompanies($userId) {
+
+		log_message("INFO", "get companies of assigned projects for user: $userId");
+		$sql = 
+			"SELECT DISTINCT c.* FROM user_project up, project p, company c " .
+			"WHERE up.project = p.id AND p.company = c.id AND up.user = ? AND up.role != 'OWNER' ";
+
+		return $this->db->query($sql, array($userId))->result_array();
+	}
+
+	public function getAssignedProjects($userId, $companyId) {
+
+		log_message("INFO", "getting assigned project of user: $userId under company: $companyId");
+
+		$sql = 
+			"SELECT DISTINCT p.* FROM user_project up, project p " .
+			"WHERE up.project = p.id AND up.user = ? AND p.company = ?";
+
+		return $this->db->query($sql, array($userId, $companyId))->result_array();
 	}
 
 }
