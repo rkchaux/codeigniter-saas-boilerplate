@@ -55,7 +55,8 @@ class User_model extends CI_Model {
 			$user = $users[0];
 			$this->session->set_userdata(array(
 				"email" => $user['email'],
-				"nickname" => $user['nickname']
+				"nickname" => $user['nickname'],
+				"id" => $user['id']
 			));
 
 			//select the first Company for this user

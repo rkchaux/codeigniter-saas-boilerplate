@@ -12,12 +12,17 @@ class Project_model extends CI_Model {
 
 		if(count($companies) == 0) {
 
+			$createdAt = time();
 			$this->db->insert("project", array(
 				"name" => $name,
 				"company" => $companyId,
-				"createdAt" => time()
+				"createdAt" => $createdAt
 			));
-			return TRUE;
+
+			$sql = "SELECT id FROM project where name=? AND company =? AND createdAt =? LIMIT 1";
+
+			$projects =  $this->db->query($sql, array($name, $companyId, $createdAt))->result_array();
+			return $projects[0]['id'];
 		} else {
 
 			log_message("INFO", "Project exists: $name by company: $companyId");
@@ -111,6 +116,16 @@ class Project_model extends CI_Model {
 		$companies = $this->db->get("project")->result_array();
 
 		return $companies;
+	}
+
+	public function assignUser($userId, $projectId) {
+
+		log_message("INFO", "assigning user: $userId to the project: $projectId");
+
+		$this->db->insert("user_project", array(
+			"user" => $userId, 
+			"project" => $projectId
+		));
 	}
 
 }

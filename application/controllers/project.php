@@ -15,9 +15,16 @@ class Project extends CI_Controller {
 		$companyInfo = $this->session->userdata("company");
 		$name = $this->input->post("name");
 
+
 		if($name) {
 
-			if($this->model->create($companyInfo['id'], $name)) {
+			$projectId = $this->model->create($companyInfo['id'], $name);
+			
+			if($projectId) {
+
+				//assign the logged_in user to the project
+				$userId = $this->session->userdata("id");
+				$this->model->assignUser($userId, $projectId);
 
 				$this->sendJson(array("success" => true));
 			} else {
