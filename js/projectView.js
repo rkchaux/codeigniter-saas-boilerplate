@@ -27,7 +27,7 @@ $(function() {
 					$('#addEmail').val('').focus();
 
 				} else {
-					alert(data.err);
+					bootbox.alert(data.err);
 				}
 			});
 		}
@@ -46,7 +46,7 @@ $(function() {
 			if(data.success) {
 				tr.remove();
 			} else {
-				alert(data.err);
+				bootbox.alert(data.err);
 			}
 		});
 	});

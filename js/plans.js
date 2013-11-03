@@ -10,7 +10,7 @@ $(function() {
 
 				location.href = BASE_URL + 'plan/select';
 			} else {
-				alert(data.error);
+				bootbox.alert(data.error);
 			}
 		});
 	});
