@@ -126,6 +126,16 @@ class Project_model extends CI_Model {
 		$this->db->query($sql, array($userId, $projectId, $role, $role));
 	}
 
+	public function removeUser($userId, $projectId) {
+
+		log_message("INFO", "removing user: $userId from the project: $projectId");
+
+		$this->db->where("user", $userId);
+		$this->db->where("project", $projectId);
+
+		$this->db->delete("user_project");
+	}
+
 	public function assignUserByEmail($email, $projectId) {
 
 		log_message("INFO", "assigning user by email: $email to the project: $projectId");
@@ -156,7 +166,7 @@ class Project_model extends CI_Model {
 
 	public function getUsers($projectId) {
 
-		$sql = "SELECT u.*, i.secret FROM user_project up, user u LEFT JOIN invitation i ON i.email = u.email WHERE up.user = u.id AND up.project = ?";
+		$sql = "SELECT u.*, i.secret, up.role FROM user_project up, user u LEFT JOIN invitation i ON i.email = u.email WHERE up.user = u.id AND up.project = ?";
 		return $this->db->query($sql, array($projectId))->result_array();
 	}
 
@@ -196,5 +206,6 @@ class Project_model extends CI_Model {
 			return FALSE;
 		}
 	}
+
 
 }

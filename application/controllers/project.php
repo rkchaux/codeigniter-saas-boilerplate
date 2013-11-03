@@ -195,6 +195,16 @@ class Project extends CI_Controller {
 		$this->sendJson(array("success" => true));
 	}
 
+	public function doRemoveUser($projectId) {
+
+		authorizedContent(true);
+		
+		$userId = $this->input->post("user");
+		$this->model->removeUser($userId, $projectId);
+
+		$this->sendJson(array("success" => true));
+	}
+
 	private function sendJson($obj) {
 		
 		header("Content-Type: application/json");
