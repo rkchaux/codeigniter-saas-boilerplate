@@ -4,6 +4,7 @@
 ?>
 <div class='container'>
 	<h1>Project: <?php echo $project['name']?></h1>
+	<a href='<?php echo site_url("user/dashboard/{$project['company']}");?>' class='btn btn-primary'>Back</a>
 
 	<div class='miniContent well'>
 

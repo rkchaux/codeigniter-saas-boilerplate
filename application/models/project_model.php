@@ -186,7 +186,7 @@ class Project_model extends CI_Model {
 
 		$sql = 
 			"SELECT DISTINCT p.* FROM user_project up, project p " .
-			"WHERE up.project = p.id AND up.user = ? AND p.company = ?";
+			"WHERE up.project = p.id AND up.user = ? AND p.company = ? AND p.archived = 0";
 
 		return $this->db->query($sql, array($userId, $companyId))->result_array();
 	}
