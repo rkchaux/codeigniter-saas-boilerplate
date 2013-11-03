@@ -160,7 +160,8 @@ class Project_model extends CI_Model {
 			$this->load->model("invitation_model");
 			$inviteKey = $this->invitation_model->inviteUser($email);
 
-			log_message("INFO", "invited email: $email with key: $inviteKey");
+			$this->load->model("email_model");
+			$this->email_model->inviteUser($email, $inviteKey);
 		}
 	}
 

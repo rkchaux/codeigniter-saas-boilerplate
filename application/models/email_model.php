@@ -11,4 +11,9 @@ class Email_model extends CI_Model {
 
 		log_message("INFO", "validating acount with: $email with code: $code");
 	}
+
+	public function inviteUser($email, $code) {
+
+		log_message("INFO", "inviting user: $email with code: $code");
+	}
 }
