@@ -27,7 +27,7 @@ $(function() {
 					$('#addEmail').val('').focus();
 
 				} else {
-					bootbox.alert(data.err);
+					bootbox.alert(data.err || data.message);
 				}
 			});
 		}
