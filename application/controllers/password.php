@@ -68,10 +68,10 @@ class Password extends CI_Controller {
 		$this->form_validation->set_rules("password", "Password", "required");
 		$this->form_validation->set_rules("confirmPassword", "Confirm Password", "required|matches[password]");
 
-		if($this->form_validation->run()) {
+		$password = $this->input->post("password");
+		$code = $this->input->post("code");
 
-			$password = $this->input->post("password");
-			$code = $this->input->post("code");
+		if($this->form_validation->run()) {
 
 			$this->load->model("password_model");
 			$this->load->model("user_model");
@@ -98,7 +98,7 @@ class Password extends CI_Controller {
 
 		} else {
 
-			$this->reset();
+			$this->newPassword($code);
 		}
 	}
 
