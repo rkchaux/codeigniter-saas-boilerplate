@@ -18,13 +18,13 @@
 		<div class="control-group">
 			<label class="control-label" for="inputPassword">Password</label>
 			<div class="controls">
-				<input type="text" name='password' value='<?php echo set_value('password');?>' id="inputPassword" placeholder="Enter your password">
+				<input type="password" name='password' value='<?php echo set_value('password');?>' id="inputPassword" placeholder="Enter your password">
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label" for="inputConfirmPassword">Confirm Password</label>
 			<div class="controls">
-				<input type="text" name='confirmPassword' value='<?php echo set_value('confirmPassword');?>' id="inputConfirmPassword" placeholder="Enter your password">
+				<input type="password" name='confirmPassword' value='<?php echo set_value('confirmPassword');?>' id="inputConfirmPassword" placeholder="Enter your password">
 			</div>
 		</div>
 		<div class="control-group">
