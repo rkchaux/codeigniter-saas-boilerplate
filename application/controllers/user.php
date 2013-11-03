@@ -98,6 +98,28 @@ class User extends CI_Controller {
 		redirect(site_url("user/login"));
 	}
 
+	public function passwordReset() {
+
+		$this->load->view("common/header");
+		$this->load->view("common/public_navbar");
+		$this->load->view("user/passwordReset");
+		$this->load->view("common/footer");
+	}
+
+	public function doPasswordReset() {
+
+		$this->load->library("form_validation");
+		$this->form_validation->set_rules("email", "Email", "required|valid_email");
+
+		if($this->form_validation->run()) {
+
+			echo "Success";
+		} else {
+
+			$this->passwordReset();
+		}
+	}
+
 	public function dashboard($companyId = NULL) {
 
 		authorizedContent();
@@ -154,4 +176,6 @@ class User extends CI_Controller {
 
 		return array_merge($companies, $projectCompanies);
 	}
+
+
 }

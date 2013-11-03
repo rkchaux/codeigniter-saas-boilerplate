@@ -1,15 +1,14 @@
 <div class='container'>
-	<legend>User Login</legend>
+	<legend>Password Reset</legend>
 
 	<!-- Show Error -->
-	<?php if(validation_errors() || $errors) { ?>
+	<?php if(validation_errors()) { ?>
 		<div class='alert alert-error alert-block'>
 			<?php echo validation_errors(); ?>
-			<?php echo $errors; ?>
 		</div>
 	<?php } ?>
 
-	<?php echo form_open("user/doLogin", array(
+	<?php echo form_open("password/doReset", array(
 			"class" => "form-horizontal",
 			"method" => "post"
 		));
@@ -22,16 +21,8 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label" for="inputPassword">Password</label>
 			<div class="controls">
-				<input type="password" name='password' id="inputPassword" placeholder="Enter your password">
-				<p></p>
-				<a href='<?php echo site_url("password/reset");?>' />Forgot Password</a>
-			</div>
-		</div>
-		<div class="control-group">
-			<div class="controls">
-				<button type="submit" class="btn btn-primary">Login</button>
+				<button type="submit" class="btn btn-primary">Reset Password</button>
 			</div>
 		</div>
 	</form>

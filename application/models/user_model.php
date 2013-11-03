@@ -126,4 +126,28 @@ class User_model extends CI_Model {
 		$this->update($email, $user);
 		return TRUE;
 	}
+
+	public function getByEmail($email) {
+
+		log_message("INFO", "get user by email: $email");
+
+		$users = $this->db->get_where("user", array("email" => $email))->result_array();
+		if(count($users) == 1) {
+			return $users[0];
+		} else {
+			return FALSE;
+		}
+	}
+
+	public function getById($id) {
+
+		log_message("INFO", "get user by id: $id");
+		
+		$users = $this->db->get_where("user", array("id" => $id))->result_array();
+		if(count($users) == 1) {
+			return $users[0];
+		} else {
+			return FALSE;
+		}
+	}
 }
