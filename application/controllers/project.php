@@ -112,6 +112,8 @@ class Project extends CI_Controller {
 
 	public function edit($id) {
 
+		authorizedContent();
+
 		$this->load->helper("form");
 
 		$companyInfo = $this->session->userdata("company");
@@ -132,6 +134,8 @@ class Project extends CI_Controller {
 
 	public function doEdit($id) {
 
+		authorizedContent();
+		
 		$this->load->library("form_validation");
 
 		$this->form_validation->set_rules("name", "Name", "required");
@@ -151,14 +155,17 @@ class Project extends CI_Controller {
 		}
 	}
 
-	public function view($id) {
+	public function view($projectId) {
 
+		authorizedContent();
+		
 		$this->load->helper("form");
 
 		$companyInfo = $this->session->userdata("company");
+		$userId = $this->session->userdata("id");
 
 		$data = array( "project" => NULL );
-		$project = $this->model->getOne($companyInfo['id'], $id);
+		$project = $this->model->getAssignedProject($userId, $projectId);
 
 
 		$this->load->view("common/header", array(
@@ -170,6 +177,8 @@ class Project extends CI_Controller {
 			$data['project'] = $project;
 			$data['users'] = $this->model->getUsers($project['id']);
 			$this->load->view("project/view", $data);
+		} else {
+			$this->load->view("project/restricted");
 		}
 
 		$this->load->view("common/footer");
@@ -178,6 +187,8 @@ class Project extends CI_Controller {
 
 	public function doAssignUser($projectId) {
 
+		authorizedContent(true);
+		
 		$email = $this->input->post("email");
 		$this->model->assignUserByEmail($email, $projectId);
 

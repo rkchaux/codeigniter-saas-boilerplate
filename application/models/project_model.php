@@ -172,13 +172,29 @@ class Project_model extends CI_Model {
 
 	public function getAssignedProjects($userId, $companyId) {
 
-		log_message("INFO", "getting assigned project of user: $userId under company: $companyId");
+		log_message("INFO", "getting assigned projects of user: $userId under company: $companyId");
 
 		$sql = 
 			"SELECT DISTINCT p.* FROM user_project up, project p " .
 			"WHERE up.project = p.id AND up.user = ? AND p.company = ?";
 
 		return $this->db->query($sql, array($userId, $companyId))->result_array();
+	}
+
+	public function getAssignedProject($userId, $projectId) {
+
+		log_message("INFO", "getting the assigned project: $projectId of user: $userId");
+
+		$sql = 
+			"SELECT DISTINCT p.* FROM user_project up, project p " .
+			"WHERE up.project = p.id AND up.user = ? AND up.project = ?";
+
+		$projects =  $this->db->query($sql, array($userId, $projectId))->result_array();
+		if(count($projects) == 1) {
+			return $projects[0];
+		} else {
+			return FALSE;
+		}
 	}
 
 }
