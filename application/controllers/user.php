@@ -40,11 +40,16 @@ class User extends CI_Controller {
 			$company = $this->input->post("company");
 
 			//register user
-			$this->model->register($email, $password, $nickname);
+			$userId = $this->model->register($email, $password, $nickname);
 
 			//register company
 			$this->load->model("company_model");
 			$this->company_model->create($email, $company);
+
+			//start validating
+			$validateCode = $this->model->startUserValidation($userId);
+			$this->load->model("email_model");
+			$this->email_model->validateUser($email, $validateCode);
 
 			$this->model->login($email);
 			redirect(site_url('user/dashboard'));
@@ -163,6 +168,24 @@ class User extends CI_Controller {
 		$this->load->view("common/footer");
 	}
 
+	public function validate($code) {
+
+		$this->load->view("common/header");
+		$this->load->view("common/public_navbar");
+		
+		$this->load->model("user_model");
+		$user = $this->user_model->completeUserValidation($code);
+		if($user) {
+
+			$this->user_model->login($user['email']);
+			$this->load->view("user/validated", array("user" => $user));
+		} else {
+			$this->load->view("user/validation_failed");
+		}
+		$this->load->view("common/footer");
+
+	}
+
 	private function _getCompanies() {
 		
 		$email = $this->session->userdata("email");
@@ -176,6 +199,5 @@ class User extends CI_Controller {
 
 		return array_merge($companies, $projectCompanies);
 	}
-
 
 }

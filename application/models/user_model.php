@@ -150,4 +150,39 @@ class User_model extends CI_Model {
 			return FALSE;
 		}
 	}
+
+	public function startUserValidation($id) {
+
+		log_message("INFO", "setting validation key for user: $id");
+
+		$code = md5(rand());
+		$this->db->insert("user_validate", array(
+			"user" => $id,
+			"code" => $code,
+			"createdAt" => time()
+		));
+
+		return $code;
+	}
+
+	public function completeUserValidation($code) {
+
+		log_message("INFO", "complete validation for code: $code");
+
+		$sql = "SELECT u.* from  user u, user_validate uv WHERE u.id = uv.user AND uv.code = ?";
+		$users = $this->db->query($sql, array($code))->result_array();
+		
+		if(count($users) == 1) {
+
+			$this->db->where("code", $code);
+			$this->db->update("user_validate", array(
+				"code" => "",
+				"validatedAt" => time()
+			));
+			return $users[0];
+		} else {
+
+			return NULL;
+		}
+	}
 }

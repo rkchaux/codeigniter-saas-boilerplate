@@ -6,4 +6,9 @@ class Email_model extends CI_Model {
 
 		log_message("INFO", "sending password reset code: $code to email: $email");
 	}
+
+	public function validateUser($email, $code) {
+
+		log_message("INFO", "validating acount with: $email with code: $code");
+	}
 }
