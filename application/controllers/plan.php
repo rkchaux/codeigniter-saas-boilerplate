@@ -37,6 +37,7 @@ class Plan extends CI_Controller {
 
 		$email = $this->session->userdata("email");
 		$companyInfo = $this->session->userdata("company");
+		$planId = intval($this->input->post("planId"));
 
 		if(!$companyInfo) {
 
@@ -44,7 +45,6 @@ class Plan extends CI_Controller {
 		} else if($planId) {
 
 			$companyId = $companyInfo['id'];
-			$planId = intval($this->input->post("planId"));
 
 			$this->model->selectPlan($companyId, $planId);
 			$this->sendJson(array("success" => true));
