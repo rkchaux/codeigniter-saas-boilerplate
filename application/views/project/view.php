@@ -8,7 +8,7 @@
 
 	<div class='miniContent well'>
 
-	<?php if($allowManage) { ?>
+	<?php if($this->model->checkPermission("ADMIN", $role)) { ?>
 		<h3>Collaboraters</h3>
 		<div id='userList'>
 			<div data-id= '<?php echo $project['id']; ?>' id='addUser' class='projectUser' style='cursor: pointer;'>
@@ -26,7 +26,7 @@
 	</div>
 </div>
 
-<?php if($allowManage) { ?>
+<?php if($this->model->checkPermission("ADMIN", $role)) { ?>
 <div class="modal hide" id="usersModal" tabindex="-1" role="dialog" aria-labelledby="usersLabel" aria-hidden="true">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>

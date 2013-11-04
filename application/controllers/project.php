@@ -158,24 +158,26 @@ class Project extends CI_Controller {
 	public function view($projectId) {
 
 		authorizedContent();
-		
+
 		$this->load->helper("form");
 
-		$companyInfo = $this->session->userdata("company");
 		$userId = $this->session->userdata("id");
 
-		$data = array( "project" => NULL );
-		$project = $this->model->getAssignedProject($userId, $projectId);
-
+		$role = $this->model->getUserRole($userId, $projectId);
 
 		$this->load->view("common/header", array(
 			"scripts" => array("projectView.js")
 		));
 		$this->load->view("common/private_navbar");
 
-		if($project) {
-			$data['project'] = $project;
-			$data['users'] = $this->model->getUsers($project['id']);
+		if($this->model->checkPermission("VIEWER", $role)) {
+
+			$data = array(
+				"project" => $this->model->getAssignedProject($userId, $projectId),
+				"users" => $this->model->getUsers($projectId),
+				"role" => $role
+			);
+
 			$this->load->view("project/view", $data);
 		} else {
 			$this->load->view("project/restricted");
@@ -188,28 +190,48 @@ class Project extends CI_Controller {
 	public function doAssignUser($projectId) {
 
 		authorizedContent(true);
-		
-		$email = $this->input->post("email");
-		$role = $this->input->post("role");
 
-		if($email && $role) {
+		$userId = $this->session->userdata("id");
+		$role = $this->model->getUserRole($userId, $projectId);
 
-			$this->model->assignUserByEmail($email, $projectId, $role);
-			$this->sendJson(array("success" => true));
+		if($this->model->checkPermission("ADMIN", $role)) {
+
+			$email = $this->input->post("email");
+			$role = $this->input->post("role");
+
+			if($email && $role) {
+
+				$this->model->assignUserByEmail($email, $projectId, $role);
+				$this->sendJson(array("success" => true));
+			} else {
+
+				$this->sendJson(array("success" => false, "error" => "Email and Role required"));
+			}
 		} else {
-
-			$this->sendJson(array("success" => false, "error" => "Email and Role required"));
+			
+			$this->sendJson(array("success" => false, "error" => "Not Allowed"));
 		}
+		
 	}
 
 	public function doRemoveUser($projectId) {
 
 		authorizedContent(true);
-		
-		$userId = $this->input->post("user");
-		$this->model->removeUser($userId, $projectId);
 
-		$this->sendJson(array("success" => true));
+		$userId = $this->session->userdata("id");
+		$role = $this->model->getUserRole($userId, $projectId);
+
+		if($this->model->checkPermission("ADMIN", $role)) {
+
+			$userId = $this->input->post("user");
+			$this->model->removeUser($userId, $projectId);
+
+			$this->sendJson(array("success" => true));
+		} else {
+			
+			$this->sendJson(array("success" => false, "error" => "Not Allowed"));
+		}
+		
 	}
 
 	private function sendJson($obj) {

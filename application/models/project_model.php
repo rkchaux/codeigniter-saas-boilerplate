@@ -208,5 +208,34 @@ class Project_model extends CI_Model {
 		}
 	}
 
+	public function getUserRole($userId, $projectId) {
+
+		log_message("INFO", "getting role of user: $userId under project: $projectId");
+
+		$this->db->select("role");
+		$users = $this->db->get_where("user_project", array(
+			"user" => $userId, 
+			"project" => $projectId
+		))->result_array();
+
+		if(count($users) == 1) {
+
+			return $users[0]["role"];
+		} else {
+			return FALSE;
+		}
+	}
+
+	public function checkPermission($minumumRole, $userRole) {
+
+		$roles = array(
+			"OWNER" => 4,
+			"ADMIN" => 3,
+			"EDITOR" => 2,
+			"VIEWER" => 1
+		);
+
+		return $roles[$minumumRole] <= $roles[$userRole];
+	}
 
 }
