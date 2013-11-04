@@ -47,16 +47,16 @@ class Item_model extends CI_Model {
 		}
 	}
 
-	// public function update($companyId, $id, $project) {
+	public function update($projectId, $id, $item) {
 
-	// 	log_message("INFO", "updating project: $id of company: $companyId");
+		log_message("INFO", "updating item: $id of project: $projectId");
 
-	// 	$this->db->where("company", $companyId);
-	// 	$this->db->where("id", $id);
+		$this->db->where("project", $projectId);
+		$this->db->where("id", $id);
 
-	// 	$this->db->update("project", $project);
-	// 	return TRUE;
-	// }
+		$this->db->update("item", $item);
+		return TRUE;
+	}
 
 	public function delete($projectId, $id) {
 

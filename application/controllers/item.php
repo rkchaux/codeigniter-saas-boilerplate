@@ -95,6 +95,8 @@ class Item extends CI_Controller {
 
 	public function view($projectId, $id) {
 
+		authorizedContent();
+
 		$this->load->model("project_model");
 		$project = $this->project_model->getOne($projectId);
 
@@ -132,53 +134,50 @@ class Item extends CI_Controller {
 	// 	$this->load->view("common/footer");
 	// }
 
-	// public function edit($id) {
+	public function edit($projectId, $id) {
 
-	// 	authorizedContent();
+		authorizedContent();
 
-	// 	$userId = $this->session->userdata("id");
-	// 	$role = $this->model->getUserRole($userId, $id);
+		$this->load->helper("form");
 
-	// 	$this->load->helper("form");
+		$this->load->model("project_model");
+		$project = $this->project_model->getOne($projectId);
 
-	// 	$data = array( "project" => NULL );
+		$item = $this->model->getOne($id);
 
-	// 	$this->load->view("common/header");
-	// 	$this->load->view("common/private_navbar");
-	// 	if($this->model->checkPermission("ADMIN", $role)) {
-			
-	// 		$project = $this->model->getOne($id);
-	// 		$data['project'] = $project;
-	// 		$data['role'] = $role;
-	// 	}
-
-	// 	$this->load->view("project/edit", $data);
-	// 	$this->load->view("common/footer");
-
-	// }
-
-	// public function doEdit($id) {
-
-	// 	authorizedContent();
+		$data = array(
+			"project" => $project, 
+			"item" => $item
+		);
 		
-	// 	$this->load->library("form_validation");
+		$this->load->view("common/header");
+		$this->load->view("common/private_navbar");
+		$this->load->view("item/edit", $data);
+		$this->load->view("common/footer");
 
-	// 	$this->form_validation->set_rules("name", "Name", "required");
+	}
 
-	// 	if($this->form_validation->run() == TRUE) {
+	public function doEdit($projectId, $id) {
+
+		authorizedContent();
+		
+		$this->load->library("form_validation");
+
+		$this->form_validation->set_rules("name", "Name", "required");
+
+		if($this->form_validation->run() == TRUE) {
 			
-	// 		$companyInfo = $this->session->userdata('company');
-	// 		$project = array(
-	// 			"name" => $this->input->post("name")
-	// 		);
+			$item = array(
+				"name" => $this->input->post("name")
+			);
 
-	// 		$this->model->update($companyInfo['id'], $id, $project);
-	// 		redirect(site_url('user/dashboard?projectEdited=true'));
-	// 	} else {
+			$this->model->update($projectId, $id, $item);
+			redirect(site_url("project/view/$projectId?itemEdited=true"));
+		} else {
 
-	// 		$this->edit($id);
-	// 	}
-	// }
+			$this->edit($id);
+		}
+	}
 
 	// public function info($id) {
 
