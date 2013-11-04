@@ -13,10 +13,21 @@ $(function() {
 	$('#assignUser').click(function() {
 
 		var email = $('#addEmail').val();
+		var role = $('#role').find(":selected").attr('name');
 
-		if(email) {
+		if(!email) {
 
-			$.post(BASE_URL + 'project/doAssignUser/' + projectId, "email=" + email, function(data) {
+			bootbox.alert("Please enter a email to assign a user");
+			$('#addEmail').focus();
+		} else if(!role) {
+
+			bootbox.alert("Please select a role!");
+			$('#role').select();
+
+		} else {
+
+			var data = "email=" + email + "&role=" + role;
+			$.post(BASE_URL + 'project/doAssignUser/' + projectId, data, function(data) {
 
 				if(data.success) {
 					$('#userSuccess').fadeIn(function() {
@@ -30,7 +41,9 @@ $(function() {
 					bootbox.alert(data.err || data.message);
 				}
 			});
+
 		}
+
 
 	});
 

@@ -41,6 +41,12 @@
 		<label class="control-label" for="inputName">Add Collaborater </label>
 		<div class="controls">
 			<input type="text" id='addEmail'  placeholder="Enter email">
+			<select id='role'>
+				<option>Select a Role</option>
+				<option name='VIEWER'>Viewer</option>
+				<option name='EDITOR'>Editor</option>
+				<option name='ADMIN'>Admin</option>
+			</select>
 			<br>
 			<button id='assignUser' class="btn btn-primary btn-snall" aria-hidden="true">Add</button>
 		</div>

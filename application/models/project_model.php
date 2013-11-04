@@ -136,14 +136,14 @@ class Project_model extends CI_Model {
 		$this->db->delete("user_project");
 	}
 
-	public function assignUserByEmail($email, $projectId) {
+	public function assignUserByEmail($email, $projectId, $role) {
 
-		log_message("INFO", "assigning user by email: $email to the project: $projectId");
+		log_message("INFO", "assigning user by email: $email to the project: $projectId with role: $role");
 
 		$users = $this->db->get_where("user", array("email" => $email))->result_array();
 		if(count($users) == 1) {
 			//user exists and asign him
-			$this->assignUser($users[0]['id'], $projectId, "USER");
+			$this->assignUser($users[0]['id'], $projectId, $role);
 		} else {
 			//invite user
 			log_message("INFO", "inviting email: $email to the project: $projectId");
@@ -154,7 +154,7 @@ class Project_model extends CI_Model {
 			$userId = $this->user_model->register($email, $password, "");
 
 			//assign user
-			$this->assignUser($userId, $projectId, "USER");
+			$this->assignUser($userId, $projectId, $role);
 
 			//inviter user
 			$this->load->model("invitation_model");

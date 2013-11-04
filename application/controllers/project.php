@@ -190,9 +190,16 @@ class Project extends CI_Controller {
 		authorizedContent(true);
 		
 		$email = $this->input->post("email");
-		$this->model->assignUserByEmail($email, $projectId);
+		$role = $this->input->post("role");
 
-		$this->sendJson(array("success" => true));
+		if($email && $role) {
+
+			$this->model->assignUserByEmail($email, $projectId, $role);
+			$this->sendJson(array("success" => true));
+		} else {
+
+			$this->sendJson(array("success" => false, "error" => "Email and Role required"));
+		}
 	}
 
 	public function doRemoveUser($projectId) {
