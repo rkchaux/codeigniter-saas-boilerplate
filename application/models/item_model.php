@@ -34,7 +34,11 @@ class Item_model extends CI_Model {
 
 	public function getByProject($projectId) {
 
-		return $this->db->get_where("item", array("project" => $projectId))->result_array();
+		$query = array(
+			"project" => $projectId,
+			"archived" => 0
+		);
+		return $this->db->get_where("item", $query)->result_array();
 	}
 
 	public function getOne($id) {

@@ -6,6 +6,7 @@ class Item extends CI_Controller {
 
 		parent::__construct();
 		$this->load->model("item_model", "model");
+		$this->load->model("project_model");
 	}
 
 	public function doCreate() {
@@ -17,25 +18,33 @@ class Item extends CI_Controller {
 		$projectId = $this->input->post("project");
 		$userId = $this->session->userdata("id");
 
-		if(!$projectId) {
+		$role = $this->project_model->getUserRole($userId, $projectId);
 
-			$this->sendJson(array("error" => "No Project Selected"));
-		} else if($name) {
+		if($this->project_model->checkPermission("EDITOR", $role)) {
 
-			$itemId = $this->model->create($userId, $projectId, $name);
-			
-			if($itemId) {
+			if(!$projectId) {
 
-				$this->sendJson(array("success" => true));
+				$this->sendJson(array("error" => "No Project Selected"));
+			} else if($name) {
+
+				$itemId = $this->model->create($userId, $projectId, $name);
+				
+				if($itemId) {
+
+					$this->sendJson(array("success" => true));
+				} else {
+
+					$this->sendJson(array("success" => false));
+				}
+				
+
 			} else {
 
-				$this->sendJson(array("success" => false));
+				$this->sendJson(array("error" => "No Name Provided"));
 			}
 			
-
 		} else {
-
-			$this->sendJson(array("error" => "No Name Provided"));
+			$this->sendJson(array("error" => "Unauthorized Access"));
 		}
 	}
 
@@ -47,14 +56,26 @@ class Item extends CI_Controller {
 		$id = $this->input->post("id");
 		$projectId = $this->input->post("project");
 
-		if($id && $projectId) {
+		$userId = $this->session->userdata("id");
 
-			$this->model->delete($projectId, $id);
-			$this->sendJson(array("success" => true));
+		$role = $this->project_model->getUserRole($userId, $projectId);
 
+		if($this->project_model->checkPermission("EDITOR", $role)) {
+
+			if($id && $projectId) {
+
+				$this->model->delete($projectId, $id);
+				$this->sendJson(array("success" => true));
+
+			} else {
+				$this->sendJson(array("error" => "No Id and Project Provided"));
+			}
+			
 		} else {
-			$this->sendJson(array("error" => "No Id and Project Provided"));
+
+			$this->sendJson(array("error" => "Unauthorized Access"));
 		}
+
 	}
 
 	public function doArchive() {
@@ -65,13 +86,23 @@ class Item extends CI_Controller {
 		$id = $this->input->post("id");
 		$projectId = $this->input->post("project");
 
-		if($id && $projectId) {
+		$userId = $this->session->userdata("id");
 
-			$this->model->archive($projectId, $id);
-			$this->sendJson(array("success" => true));
-		
+		$role = $this->project_model->getUserRole($userId, $projectId);
+
+		if($this->project_model->checkPermission("EDITOR", $role)) {
+
+			if($id && $projectId) {
+
+				$this->model->archive($projectId, $id);
+				$this->sendJson(array("success" => true));
+			
+			} else {
+				$this->sendJson(array("error" => "No Id and Project Provided"));
+			}
 		} else {
-			$this->sendJson(array("error" => "No Id and Project Provided"));
+
+			$this->sendJson(array("error" => "Unauthorized Access"));
 		}
 	}
 
@@ -83,13 +114,24 @@ class Item extends CI_Controller {
 		$id = $this->input->post("id");
 		$projectId = $this->input->post("project");
 
-		if($id && $projectId) {
+		$userId = $this->session->userdata("id");
 
-			$this->model->archive($projectId, $id);
-			$this->sendJson(array("success" => true));
-		
+		$role = $this->project_model->getUserRole($userId, $projectId);
+
+		if($this->project_model->checkPermission("EDITOR", $role)) {
+
+
+			if($id && $projectId) {
+
+				$this->model->archive($projectId, $id);
+				$this->sendJson(array("success" => true));
+			
+			} else {
+				$this->sendJson(array("error" => "No Id and Project Provided"));
+			}
 		} else {
-			$this->sendJson(array("error" => "No Id and Project Provided"));
+
+			$this->sendJson(array("error" => "Unauthorized Access"));
 		}
 	}
 
@@ -97,20 +139,30 @@ class Item extends CI_Controller {
 
 		authorizedContent();
 
-		$this->load->model("project_model");
-		$project = $this->project_model->getOne($projectId);
+		$userId = $this->session->userdata("id");
+		$role = $this->project_model->getUserRole($userId, $projectId);
 
-		$item = $this->model->getOne($id);
+		if($this->project_model->checkPermission("VIEWER", $role)) {
 
-		$data = array(
-			"project" => $project, 
-			"item" => $item
-		);
-		
-		$this->load->view("common/header");
-		$this->load->view("common/private_navbar");
-		$this->load->view("item/view", $data);
-		$this->load->view("common/footer");
+			$project = $this->project_model->getOne($projectId);
+
+			$item = $this->model->getOne($id);
+
+			$data = array(
+				"project" => $project, 
+				"item" => $item,
+				"role" => $role
+			);
+			
+			$this->load->view("common/header");
+			$this->load->view("common/private_navbar");
+			$this->load->view("item/view", $data);
+			$this->load->view("common/footer");
+			
+		} else {
+			echo "Unauthorized access!";
+		}
+
 	}
 
 	// public function archive() {
@@ -140,42 +192,60 @@ class Item extends CI_Controller {
 
 		$this->load->helper("form");
 
-		$this->load->model("project_model");
-		$project = $this->project_model->getOne($projectId);
+		$userId = $this->session->userdata("id");
+		$role = $this->project_model->getUserRole($userId, $projectId);
 
-		$item = $this->model->getOne($id);
+		if($this->project_model->checkPermission("EDITOR", $role)) {
 
-		$data = array(
-			"project" => $project, 
-			"item" => $item
-		);
-		
-		$this->load->view("common/header");
-		$this->load->view("common/private_navbar");
-		$this->load->view("item/edit", $data);
-		$this->load->view("common/footer");
+			$project = $this->project_model->getOne($projectId);
+
+			$item = $this->model->getOne($id);
+
+			$data = array(
+				"project" => $project, 
+				"item" => $item,
+				"role" => $role
+			);
+			
+			$this->load->view("common/header");
+			$this->load->view("common/private_navbar");
+			$this->load->view("item/edit", $data);
+			$this->load->view("common/footer");
+		} else {
+
+			echo "Unauthorized Access!";
+		}
 
 	}
 
 	public function doEdit($projectId, $id) {
 
 		authorizedContent();
+
+		$userId = $this->session->userdata("id");
+		$role = $this->project_model->getUserRole($userId, $projectId);
+
+		if($this->project_model->checkPermission("EDITOR", $role)) {
 		
-		$this->load->library("form_validation");
+			$this->load->library("form_validation");
 
-		$this->form_validation->set_rules("name", "Name", "required");
+			$this->form_validation->set_rules("name", "Name", "required");
 
-		if($this->form_validation->run() == TRUE) {
-			
-			$item = array(
-				"name" => $this->input->post("name")
-			);
+			if($this->form_validation->run() == TRUE) {
+				
+				$item = array(
+					"name" => $this->input->post("name")
+				);
 
-			$this->model->update($projectId, $id, $item);
-			redirect(site_url("project/view/$projectId?itemEdited=true"));
+				$this->model->update($projectId, $id, $item);
+				redirect(site_url("project/view/$projectId?itemEdited=true"));
+			} else {
+
+				$this->edit($id);
+			}
 		} else {
 
-			$this->edit($id);
+			echo "Unauthorized access!";
 		}
 	}
 

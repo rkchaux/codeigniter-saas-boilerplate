@@ -7,7 +7,10 @@
 
 		array_push($links, array("caption" => "Back to Project", "href" => "project/view/{$project['id']}"));
 		array_push($links, array("caption" => "Info", "href" => "item/view/{$project['id']}/{$item['id']}"));
-		array_push($links, array("caption" => "Settings", "href" => "item/edit/{$project['id']}/{$item['id']}"));
+		
+		if($this->project_model->checkPermission("EDITOR", $role)) {
+			array_push($links, array("caption" => "Settings", "href" => "item/edit/{$project['id']}/{$item['id']}"));
+		}
 
 	?>
 	<div class="navbar">

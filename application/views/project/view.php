@@ -36,20 +36,24 @@
 			</div>
 		<?php } ?>
 			
+		<?php if($this->model->checkPermission("EDITOR", $role)) { ?>
 			<div data-project='<?php echo $project['id']; ?>' id='addItem' class='item well'>
 				<div class='name'>Add New Item</div>
 				<img style='width: 150px; height: 150px;' src="<?php echo base_url(); ?>images/add.png" />
 			</div>	
+		<?php } ?>
 			
 			<?php foreach($items as $item) { ?>
 
 				<div class='item well'>
 					<div class='name'><?php echo $item['name']?></div>
 					<a href='<?php echo site_url("item/view/{$project['id']}/{$item['id']}");?>'><img src="http://placehold.it/150x127" /></a>
-					
+				
+				<?php if($this->model->checkPermission("EDITOR", $role)) { ?>
 					<a href='<?php echo site_url("item/edit/{$project['id']}/{$item['id']}"); ?>' class='itemEdit btn btn-info btn-mini'>Edit</a>
 					<button data-project='<?php echo $project['id']; ?>' data-id='<?php echo $item['id']; ?>' class='itemArchive btn btn-inverse btn-mini'>Archive</button>
 					<button data-project='<?php echo $project['id']; ?>' data-id='<?php echo $item['id']; ?>' class='itemDelete btn btn-danger btn-mini'>Delete</button>
+				<?php } ?>
 				</div>	
 
 			<?php } ?>
