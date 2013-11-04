@@ -63,11 +63,37 @@ body {
 }
 
 #userList {
-	margin: 0px 0px 10px 0px;
-	width: 200px;
+	width: 175px;
+	text-align: left;
 }
 
 .projectUser {
 	float: left;
 	margin: 0px 3px 3px 0px;
+}
+
+.item {
+
+	padding: 10px 20px 10px 20px;
+	margin: 0px 20px 20px 0px;
+	border: 1px solid #ccc;
+	float: left;
+	width: 160px;
+	text-align: center;
+}
+
+.item img {
+
+	margin: 0px 0px 5px 0px;
+}
+
+.item .name {
+
+	font-size: 15px;
+	font-weight: bold;
+	margin: 0px 0px 10px 0px;
+}
+
+#addItem {
+	cursor: pointer;
 }

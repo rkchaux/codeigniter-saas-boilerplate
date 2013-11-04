@@ -1,28 +1,63 @@
 <?php
 	$companyInfo = $this->session->userdata("company");
 	$allowManage = $project['company'] == $companyInfo['id'];
+
+	$sampleItem = array(
+		"name" => "The Item",
+		"id" => 100
+	);
 ?>
 <div class='container'>
-	<h1>Project: <?php echo $project['name']?></h1>
-	<a href='<?php echo site_url("user/dashboard/{$project['company']}");?>' class='btn btn-primary'>Back</a>
+	
+	<?php
+		$this->load->view("project/menubar", array(
+			"project" => $project,
+			"role" => $role
+		));
+	?>
 
-	<div class='miniContent well'>
+	<div class='miniContent'>
 
-	<?php if($this->model->checkPermission("ADMIN", $role)) { ?>
-		<h3>Collaboraters</h3>
-		<div id='userList'>
-			<div data-id= '<?php echo $project['id']; ?>' id='addUser' class='projectUser' style='cursor: pointer;'>
-				<img src='<?php echo base_url() . "images/addUser.png"; ?>' rel="tooltip" title="Add new collaborater"/>
-			</div>
-			<?php foreach($users as $user) { ?>
-				<div class='projectUser'>
-					<img src='http://placehold.it/40x40' rel="tooltip" title="<?php echo $user['email']; ?>" />
+		<div id='itemList'>
+
+		<?php if($this->model->checkPermission("ADMIN", $role)) { ?>
+			<div class='item well' id='userList'>
+				<h3>Collaboraters</h3>
+				<div data-id= '<?php echo $project['id']; ?>' id='addUser' class='projectUser' style='cursor: pointer;'>
+					<img src='<?php echo base_url() . "images/addUser.png"; ?>' rel="tooltip" title="Add new collaborater"/>
 				</div>
+				<?php foreach($users as $user) { ?>
+					<div class='projectUser'>
+						<img src='http://placehold.it/40x40' rel="tooltip" title="<?php echo $user['email']; ?>" />
+					</div>
+				<?php } ?>
+				<div style='clear:both;'></div><p></p>
+				<button data-id='<?php echo $project['id']; ?>' class='btn btn-primary' id='manageUsers'>Manage</button>
+			</div>
+		<?php } ?>
+			
+			<div data-project='<?php echo $project['id']; ?>' id='addItem' class='item well'>
+				<div class='name'>Add New Item</div>
+				<img style='width: 150px; height: 150px;' src="<?php echo base_url(); ?>images/add.png" />
+			</div>	
+			
+			<?php foreach($items as $item) { ?>
+
+				<div class='item well'>
+					<div class='name'><?php echo $item['name']?></div>
+					<a href='<?php echo site_url("item/view/{$project['id']}/{$item['id']}");?>'><img src="http://placehold.it/150x127" /></a>
+					
+					<a href='<?php echo site_url("item/edit/{$project['id']}/{$item['id']}"); ?>' class='itemEdit btn btn-info btn-mini'>Edit</a>
+					<button data-project='<?php echo $project['id']; ?>' data-id='<?php echo $item['id']; ?>' class='itemArchive btn btn-inverse btn-mini'>Archive</button>
+					<button data-project='<?php echo $project['id']; ?>' data-id='<?php echo $item['id']; ?>' class='itemDelete btn btn-danger btn-mini'>Delete</button>
+				</div>	
+
 			<?php } ?>
-			<div style='clear:both;'></div>
 		</div>
-		<button data-id='<?php echo $project['id']; ?>' class='btn btn-primary' id='manageUsers'>Manage</button>
-	<?php } ?>
+
+
+
+
 	</div>
 </div>
 

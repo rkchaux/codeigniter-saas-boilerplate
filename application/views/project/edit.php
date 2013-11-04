@@ -1,9 +1,15 @@
 <div class='container'>
-	<h1>Edit Project</h1>
+
+	<?php
+		$this->load->view("project/menubar", array(
+			"project" => $project,
+			"role" => $role
+		));
+	?>
 
 	<div class='miniContent'>
 
-		<?php if(isset($project)) { ?>
+		<?php if($this->model->checkPermission("ADMIN", $role)) { ?>
 			<?php if(validation_errors()) { ?>
 				<div class='alert alert-error alert-block'>
 					<?php echo validation_errors(); ?>

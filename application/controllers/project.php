@@ -114,19 +114,22 @@ class Project extends CI_Controller {
 
 		authorizedContent();
 
+		$userId = $this->session->userdata("id");
+		$role = $this->model->getUserRole($userId, $id);
+
 		$this->load->helper("form");
 
-		$companyInfo = $this->session->userdata("company");
-
 		$data = array( "project" => NULL );
-		$project = $this->model->getOne($companyInfo['id'], $id);
-
-		if($project) {
-			$data['project'] = $project;
-		}
 
 		$this->load->view("common/header");
 		$this->load->view("common/private_navbar");
+		if($this->model->checkPermission("ADMIN", $role)) {
+			
+			$project = $this->model->getOne($id);
+			$data['project'] = $project;
+			$data['role'] = $role;
+		}
+
 		$this->load->view("project/edit", $data);
 		$this->load->view("common/footer");
 
@@ -155,6 +158,23 @@ class Project extends CI_Controller {
 		}
 	}
 
+	public function info($id) {
+
+		$userId = $this->session->userdata("id");
+
+		$role = $this->model->getUserRole($userId, $id);
+
+		$data = array(
+			"project" => $this->model->getOne($id),
+			"role" => $role
+		);
+
+		$this->load->view("common/header");
+		$this->load->view("common/private_navbar");
+		$this->load->view("project/info", $data);
+		$this->load->view("common/footer");
+	}
+
 	public function view($projectId) {
 
 		authorizedContent();
@@ -166,15 +186,17 @@ class Project extends CI_Controller {
 		$role = $this->model->getUserRole($userId, $projectId);
 
 		$this->load->view("common/header", array(
-			"scripts" => array("projectView.js")
+			"scripts" => array("projectView.js", "item.js")
 		));
 		$this->load->view("common/private_navbar");
 
 		if($this->model->checkPermission("VIEWER", $role)) {
 
+			$this->load->model("item_model");
 			$data = array(
 				"project" => $this->model->getAssignedProject($userId, $projectId),
 				"users" => $this->model->getUsers($projectId),
+				"items" => $this->item_model->getByProject($projectId),
 				"role" => $role
 			);
 

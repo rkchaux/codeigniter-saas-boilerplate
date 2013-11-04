@@ -89,20 +89,19 @@ class Project_model extends CI_Model {
 		return $companies;
 	}
 
-	public function getOne($companyId, $projectId) {
+	public function getOne($projectId) {
 
-		log_message("INFO", "getting project: $projectId for company: $companyId");
+		log_message("INFO", "getting project: $projectId");
 
-		$this->db->where("company", $companyId);
 		$this->db->where("id", $projectId);
 
-		$companies = $this->db->get("project")->result_array();
+		$projects = $this->db->get("project")->result_array();
 
-		if(count($companies) == 1) {
-			return $companies[0];
+		if(count($projects) == 1) {
+			return $projects[0];
 		} else {
 
-			log_message("ERROR", "no such project: $projectId for company: $companyId");
+			log_message("ERROR", "no such project: $projectId");
 			return FALSE;
 		}
 	}
