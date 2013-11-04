@@ -16,8 +16,10 @@
 		));
 	?>
 
+	<?php if($this->model->checkPermission("EDITOR", $role)) { ?>
 	<button id='startReorder' class='btn btn-success'>Reorder Items</button>
 	<button id='endReorder' class='btn btn-danger hide'>Save New Order</button>
+	<?php } ?>
 	<p></p>
 	<div id='alertReorder' class='alert hide'>
 		<strong></strong>
