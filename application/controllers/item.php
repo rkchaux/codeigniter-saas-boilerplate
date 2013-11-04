@@ -123,7 +123,7 @@ class Item extends CI_Controller {
 
 			if($id && $projectId) {
 
-				$this->model->archive($projectId, $id);
+				$this->model->unarchive($projectId, $id);
 				$this->sendJson(array("success" => true));
 			
 			} else {

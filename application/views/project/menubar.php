@@ -11,6 +11,7 @@
 	
 		if($this->model->checkPermission("ADMIN", $role)) {
 
+			array_push($links, array("caption" => "Archived Items", "href" => "project/archivedItems/{$project['id']}"));
 			array_push($links, array("caption" => "Settings", "href" => "project/edit/{$project['id']}"));
 		}
 

@@ -99,6 +99,17 @@ class Item_model extends CI_Model {
 		return TRUE;
 	}
 
+	public function getArchived($projectId) {
+
+		log_message("INFO", "getiing all archived items for project: $projectId");
+
+		$this->db->where("archived", 1);
+		$this->db->where("project", $projectId);
+		$items = $this->db->get("item")->result_array();
+
+		return $items;
+	}
+
 	// public function get($companyId) {
 
 	// 	log_message("INFO", "getiing all projects for company: $companyId");
@@ -127,16 +138,6 @@ class Item_model extends CI_Model {
 	// 	}
 	// }
 
-	// public function getArchived($companyId) {
-
-	// 	log_message("INFO", "getiing all archived projects for company: $companyId");
-
-	// 	$this->db->where("archived", 1);
-	// 	$this->db->where("company", $companyId);
-	// 	$companies = $this->db->get("project")->result_array();
-
-	// 	return $companies;
-	// }
 
 	// public function assignUser($userId, $projectId, $role) {
 

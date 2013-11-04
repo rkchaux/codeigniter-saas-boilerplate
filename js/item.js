@@ -73,7 +73,7 @@ $(function() {
 
 	});
 
-	$('.projectUnarchive').live('click', function() {
+	$('.itemUnarchive').live('click', function() {
 
 		var itemDiv = $(this).parent();
 		var id = $(this).attr('data-id');
@@ -82,7 +82,8 @@ $(function() {
 
 			if(confirmed) {
 
-				$.post(BASE_URL + 'item/doUnarchive', "id=" + id, function(data) {
+				var data = "id=" + id + "&project=" + project;
+				$.post(BASE_URL + 'item/doUnarchive', data, function(data) {
 
 					if(data.success) {
 						location.href = BASE_URL + 'project/archive';

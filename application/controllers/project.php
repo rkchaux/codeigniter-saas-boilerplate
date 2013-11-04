@@ -110,6 +110,41 @@ class Project extends CI_Controller {
 		$this->load->view("common/footer");
 	}
 
+	public function archivedItems($projectId) {
+
+		authorizedContent();
+
+		$userId = $this->session->userdata("id");
+		$role = $this->model->getUserRole($userId, $projectId);
+
+		if($this->model->checkPermission("EDITOR", $role)) {
+
+			$data = array(
+				"scripts"=> array("item.js")
+			);
+
+			$project = $this->model->getOne($projectId);
+
+			$this->load->model("item_model");
+
+			$archiveData = array(
+				"items" => $this->item_model->getArchived($projectId),
+				"project" => $project,
+				"role" => $role
+			);
+
+			$this->load->view("common/header", $data);
+			$this->load->view("common/private_navbar");
+			$this->load->view("project/archived_items", $archiveData);
+			$this->load->view("common/footer");
+
+		} else {
+
+			
+		}
+
+	}
+
 	public function edit($id) {
 
 		authorizedContent();
