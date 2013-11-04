@@ -97,4 +97,58 @@ $(function() {
 
 
 	});
+
+	/*
+		************ Reordering Support *****************
+	*/
+	$('#startReorder').click(function() {
+
+		$("#startReorder").hide();
+		$("#endReorder").show();
+
+		$('#alertReorder')
+			.removeClass('alert-success')
+			.html("Reorder items now, after completing click the above button.")
+			.show();
+		$('#itemSortList').sortable();
+	});
+
+	$('#endReorder').click(function() {
+
+		$("#startReorder").show();
+		$("#endReorder").hide();
+
+		$('#itemSortList').sortable('destroy');
+
+		var project = null;	
+		var sortList = [];
+		$('#itemSortList .item').each(function(item) {
+
+			project = $(this).attr('data-project');
+			sortList.push($(this).attr('data-id'));
+
+		});
+
+		var data = "project=" + project + "&sortList=" + sortList.join(",");
+
+		console.log(data);
+		$.post(BASE_URL + 'item/doReorder', data, function(data) {
+
+			if(data.success) {
+
+				$('#alertReorder')
+					.addClass('alert-success')
+					.html("Successfully Reordered!")
+					.show();
+
+				setTimeout(function() {
+
+					$('#alertReorder').hide();
+				}, 4000);
+			} else {
+				bootbox.alert(data.error);
+			}
+		});
+
+	});
 });

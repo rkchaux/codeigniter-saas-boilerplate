@@ -9,16 +9,20 @@ class Item_model extends CI_Model {
 		$this->db->where("name", $name);
 		$this->db->where("project", $projectId);
 		$this->db->where("user", $userId);
-		$companies = $this->db->get("item")->result_array();
+		$items = $this->db->get("item")->result_array();
 
-		if(count($companies) == 0) {
+		if(count($items) == 0) {
+
+			//count #of items for this project
+			$count = $this->countByProject($projectId);
 
 			$createdAt = time();
 			$this->db->insert("item", array(
 				"name" => $name,
 				"project" => $projectId,
 				"user" => $userId,
-				"createdAt" => $createdAt
+				"createdAt" => $createdAt,
+				"sortId" => $count + 1
 			));
 
 			$sql = "SELECT id FROM item where name=? AND project =? AND user=? AND createdAt =? LIMIT 1";
@@ -32,12 +36,22 @@ class Item_model extends CI_Model {
 		}
 	}
 
+	public function countByProject($projectId) {
+
+		$sql = "SELECT COUNT(*) AS cnt FROM item WHERE project=?";
+		$data = $this->db->query($sql, array($projectId))->result_array();
+
+		return $data[0]['cnt'];
+	}
+
 	public function getByProject($projectId) {
 
+		$this->db->order_by("sortId", "ASC");
 		$query = array(
 			"project" => $projectId,
 			"archived" => 0
 		);
+
 		return $this->db->get_where("item", $query)->result_array();
 	}
 
@@ -108,6 +122,23 @@ class Item_model extends CI_Model {
 		$items = $this->db->get("item")->result_array();
 
 		return $items;
+	}
+
+	public function reorder($projectId, $sortList) {
+
+		log_message("INFO", "reordering items at project: $projectId");
+
+		$data = array();
+
+		foreach ($sortList as $index => $id) {
+			array_push($data, array(
+				"id" => $id,
+				"sortId" => $index + 1,
+				"project" => $projectId
+			));
+		}
+
+		$this->db->update_batch('item', $data, "id");
 	}
 
 	// public function get($companyId) {

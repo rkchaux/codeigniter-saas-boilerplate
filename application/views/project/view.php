@@ -16,7 +16,14 @@
 		));
 	?>
 
+	<button id='startReorder' class='btn btn-success'>Reorder Items</button>
+	<button id='endReorder' class='btn btn-danger hide'>Save New Order</button>
+	<p></p>
+	<div id='alertReorder' class='alert hide'>
+		<strong></strong>
+	</div>
 	<div class='miniContent'>
+
 
 		<div id='itemList'>
 
@@ -43,9 +50,10 @@
 			</div>	
 		<?php } ?>
 			
+			<div id='itemSortList'>
 			<?php foreach($items as $item) { ?>
 
-				<div class='item well'>
+				<div data-project='<?php echo $project['id']; ?>' data-id='<?php echo $item['id']; ?>' class='item well'>
 					<div class='name'><?php echo $item['name']?></div>
 					<a href='<?php echo site_url("item/view/{$project['id']}/{$item['id']}");?>'><img src="http://placehold.it/150x127" /></a>
 				
@@ -57,6 +65,7 @@
 				</div>	
 
 			<?php } ?>
+			</div>
 		</div>
 
 

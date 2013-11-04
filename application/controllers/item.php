@@ -135,6 +135,35 @@ class Item extends CI_Controller {
 		}
 	}
 
+	public function doReorder() {
+
+		authorizedContent(true);
+
+		$sortList = $this->input->post("sortList");
+		$projectId = $this->input->post("project");
+
+		$userId = $this->session->userdata("id");
+
+		$role = $this->project_model->getUserRole($userId, $projectId);
+
+		if($this->project_model->checkPermission("EDITOR", $role)) {
+
+
+			if($sortList && $projectId) {
+
+				$sortList = explode(",", $sortList);
+				$this->model->reorder($projectId, $sortList);
+				$this->sendJson(array("success" => true));
+			
+			} else {
+				$this->sendJson(array("error" => "No Id and Project Provided"));
+			}
+		} else {
+
+			$this->sendJson(array("error" => "Unauthorized Access"));
+		}
+	}
+
 	public function view($projectId, $id) {
 
 		authorizedContent();
@@ -164,6 +193,8 @@ class Item extends CI_Controller {
 		}
 
 	}
+
+
 
 	// public function archive() {
 
