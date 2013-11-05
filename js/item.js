@@ -86,7 +86,7 @@ $(function() {
 				$.post(BASE_URL + 'item/doUnarchive', data, function(data) {
 
 					if(data.success) {
-						location.href = BASE_URL + 'project/archive';
+						location.href = BASE_URL + 'project/archivedItems/' + project;
 					} else {
 						bootbox.alert(data.error);
 					}
