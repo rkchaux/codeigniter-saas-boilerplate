@@ -195,9 +195,9 @@ class Project extends CI_Controller {
 
 	public function info($id) {
 
-		$userId = $this->session->userdata("id");
-
-		$role = $this->model->getUserRole($userId, $id);
+		$shareInfo = authorizedContentWithSharing($id);
+		$role = $shareInfo['role'];
+		$project = $shareInfo['project'];
 
 		$data = array(
 			"project" => $this->model->getOne($id),
@@ -212,13 +212,11 @@ class Project extends CI_Controller {
 
 	public function view($projectId) {
 
-		authorizedContent();
+		$shareInfo = authorizedContentWithSharing($projectId);
+		$role = $shareInfo['role'];
+		$project = $shareInfo['project'];
 
 		$this->load->helper("form");
-
-		$userId = $this->session->userdata("id");
-
-		$role = $this->model->getUserRole($userId, $projectId);
 
 		$this->load->view("common/header", array(
 			"scripts" => array("projectView.js", "item.js")
@@ -229,10 +227,11 @@ class Project extends CI_Controller {
 
 			$this->load->model("item_model");
 			$data = array(
-				"project" => $this->model->getAssignedProject($userId, $projectId),
+				"project" => $project,
 				"users" => $this->model->getUsers($projectId),
 				"items" => $this->item_model->getByProject($projectId),
-				"role" => $role
+				"role" => $role,
+				"shareCode" => $this->model->getShareCode($projectId)
 			);
 
 			$this->load->view("project/view", $data);
@@ -241,6 +240,28 @@ class Project extends CI_Controller {
 		}
 
 		$this->load->view("common/footer");
+
+	}
+
+	public function share($code) {
+
+
+		$project = $this->model->getProjectByShareCode($code);
+		
+		if($project) {
+
+			$this->session->set_userdata("SHARE_PROJECT", $project['id']);
+			$this->view($project['id']);
+
+		} else {
+
+			$this->load->view("common/header", array(
+				"scripts" => array("projectView.js", "item.js")
+			));
+			$this->load->view("common/public_navbar");
+			$this->load->view("project/invalid_share_code");
+		}
+
 
 	}
 

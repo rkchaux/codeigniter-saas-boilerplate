@@ -237,4 +237,48 @@ class Project_model extends CI_Model {
 		return $roles[$minumumRole] <= $roles[$userRole];
 	}
 
+	/*
+		Get the share code for the project.
+		If not exists, create a one 
+	*/
+	public function getShareCode($projectId) {
+
+		log_message("INFO", "getting share code for project: $projectId");
+
+		$codes = $this->db->get_where("project_share", array("project" => $projectId))->result_array();
+		
+		if(count($codes) == 1) {
+
+			return $codes[0]['code'];
+		} else {
+
+			$code = md5(rand());
+
+			log_message("INFO", "Creating share code: $code for project: $projectId");
+
+			$this->db->insert("project_share", array(
+				"project" => $projectId,
+				"code" => $code
+			));
+
+			return $code;
+		}
+	}
+
+	public function getProjectByShareCode($code) {
+
+		log_message("INFO", "getting project from the share code: $code");
+
+		$sql = "SELECT p.* FROM project p, project_share ps WHERE p.id = ps.project AND ps.code = ?";
+		$projects = $this->db->query($sql, array($code))->result_array();
+
+		if(count($projects) == 1) {
+			
+			return $projects[0];
+		} else {
+
+			return NULL;
+		}
+	}
+
 }

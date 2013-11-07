@@ -166,10 +166,9 @@ class Item extends CI_Controller {
 
 	public function view($projectId, $id) {
 
-		authorizedContent();
-
-		$userId = $this->session->userdata("id");
-		$role = $this->project_model->getUserRole($userId, $projectId);
+		$shareInfo = authorizedContentWithSharing($projectId);
+		$role = $shareInfo['role'];
+		$project = $shareInfo['project'];
 
 		if($this->project_model->checkPermission("VIEWER", $role)) {
 

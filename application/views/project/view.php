@@ -6,6 +6,10 @@
 		"name" => "The Item",
 		"id" => 100
 	);
+
+	if(!isset($shareCode)) {
+		$shareCode = "";
+	}
 ?>
 <div class='container'>
 	
@@ -42,6 +46,7 @@
 				<?php } ?>
 				<div style='clear:both;'></div><p></p>
 				<button data-id='<?php echo $project['id']; ?>' class='btn btn-primary' id='manageUsers'>Manage</button>
+				<a href='#shareModal' role='button' data-toggle="modal" class='btn btn-success' id='shareProject'>Share</a>
 			</div>
 		<?php } ?>
 			
@@ -131,3 +136,24 @@
   </div>
 </div>
 <?php } ?>
+
+
+<div id='shareModal' class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Share Project</h3>
+  </div>
+  <div class="modal-body">
+    <div class="control-group">
+		<label class="control-label" for="shareUrl">
+			Use following link to share project with anyone (does not require login)
+		</label>
+		<div class="controls">
+			<input type="text" style='width: 450px;' id='shareUrl' value='<?php echo site_url("/project/share/$shareCode"); ?>'>
+		</div>
+	</div>
+  </div>
+  <div class="modal-footer">
+    <a data-dismiss="modal" aria-hidden="true" class="btn">Close</a>
+  </div>
+</div>

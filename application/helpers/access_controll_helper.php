@@ -21,3 +21,37 @@ function authorizedContent($jsonUser = false) {
 		}
 	}
 }
+
+function authorizedContentWithSharing($projectId) {
+
+	$CI =& get_instance();
+	$userId = $CI->session->userdata("id");
+	$CI->load->model("project_model");
+
+	if($userId) {
+
+		$role = $CI->project_model->getUserRole($userId, $projectId);
+
+		if($role) {
+			$project = $CI->project_model->getAssignedProject($userId, $projectId);
+		} else if($CI->session->userdata("SHARE_PROJECT") == $projectId) {
+
+			$role = "VIEWER";
+			$project = $CI->project_model->getOne($projectId);
+		} else {
+			authorizedContent();
+		}
+		
+	} else if($CI->session->userdata("SHARE_PROJECT") == $projectId) {
+
+		$role = "VIEWER";
+		$project = $CI->project_model->getOne($projectId);
+	} else {
+		authorizedContent();
+	}
+
+	return array(
+		'role' => $role,
+		'project' => $project
+	);
+} 
