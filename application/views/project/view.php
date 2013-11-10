@@ -41,7 +41,7 @@
 				</div>
 				<?php foreach($users as $user) { ?>
 					<div class='projectUser'>
-						<img src='http://placehold.it/40x40' rel="tooltip" title="<?php echo $user['email']; ?>" />
+						<img src='http://dummyimage.com/40x40' rel="tooltip" title="<?php echo $user['email']; ?>" />
 					</div>
 				<?php } ?>
 				<div style='clear:both;'></div><p></p>
@@ -62,7 +62,7 @@
 
 				<div data-project='<?php echo $project['id']; ?>' data-id='<?php echo $item['id']; ?>' class='item well'>
 					<div class='name'><?php echo $item['name']?></div>
-					<a href='<?php echo site_url("item/view/{$project['id']}/{$item['id']}");?>'><img src="http://placehold.it/150x127" /></a>
+					<a href='<?php echo site_url("item/view/{$project['id']}/{$item['id']}");?>'><img src="http://dummyimage.com/150x127" /></a>
 				
 				<?php if($this->model->checkPermission("EDITOR", $role)) { ?>
 					<a href='<?php echo site_url("item/edit/{$project['id']}/{$item['id']}"); ?>' class='itemEdit btn btn-info btn-mini'>Edit</a>
@@ -116,7 +116,7 @@
 					if($user['role'] == 'OWNER') continue;
 			?>	
 			<tr>
-				<td><img src='http://placehold.it/40x40' /></td>
+				<td><img src='http://dummyimage.com/40x40' /></td>
 				<td>
 				<?php 
 					echo "{$user['email']} (<b>{$user['role']})</b>"; 

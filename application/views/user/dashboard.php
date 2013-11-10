@@ -33,7 +33,7 @@
 
 				<div class='project well'>
 					<div class='name'><?php echo $project['name']?></div>
-					<a href='<?php echo site_url('project/view/' . $project['id']);?>'><img src="http://placehold.it/150x127" /></a>
+					<a href='<?php echo site_url('project/view/' . $project['id']);?>'><img src="http://dummyimage.com/150x127" /></a>
 					
 					<?php if($myCompanyId == $selectedCompany) { ?>
 						<a href='<?php echo site_url('project/edit/' . $project['id']); ?>' class='projectEdit btn btn-info btn-mini'>Edit</a>
